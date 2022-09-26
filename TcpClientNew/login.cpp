@@ -7,7 +7,7 @@ Login::Login(QWidget *parent)
 {
     ui->setupUi(this);
     mSocket = new QTcpSocket(this);
-    mSocket->connectToHost("127.0.0.1", 1234);
+    mSocket->connectToHost("127.0.0.1", 1242);
 }
 
 Login::~Login()
@@ -26,7 +26,7 @@ void Login::on_btn_login_clicked()
 
 void Login::on_btn_reg_clicked()
 {
-    wind_reg = new Registration(this);
+    wind_reg = new Registration(this, mSocket);
     wind_reg->show();
     this->close();
 }

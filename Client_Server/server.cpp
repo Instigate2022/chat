@@ -18,20 +18,22 @@
 
 using namespace std;
 
-struct Clients
+
+
+struct Client
 {
     string name;
-    int socket;
+    string password;
 
-    Clients(string name, int socket)
+    Client(string name, string password)
     {
         this->name = name;
-        this->socket = socket;
+        this->password = password;
     }
 
 };
 
-vector<Clients> list_clients;
+vector<Client*> list_clients;
 
 void ClientConnect(int client);
 void Send(int client, bool *isExit);
@@ -70,19 +72,36 @@ int main()
     }
 }
 
+vector <string> split(string a, string b) {
+	vector<string> matr;  
+	string popox;
+	for(int i = 0; i < a.size(); i++) {
+		if (a[i] != b) {
+			popox += a[i]
+		} 	
+	}
+}
+
 void ClientConnect(int client)
 {
     bool isExit = false;
     char buffer[buf_s];
     recv(client, buffer, buf_s, 0);
     string name = buffer;
-    Clients user(name, client);
+    cout << "Name: " << name << '\n';
+
+    Client *user = new Client(name, password);
     list_clients.push_back(user);
     thread thSend(Send, client, &isExit);
     thread thRecv(Recv, client, &isExit);
     thSend.join();
     thRecv.join();
+    
+
 }
+std::vector <Client*> client_list;
+
+
 
 void Send(int client, bool *isExit)
 {

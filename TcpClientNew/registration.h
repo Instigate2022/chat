@@ -2,6 +2,9 @@
 #define REGISTRATION_H
 
 #include <QWidget>
+#include <QMessageBox>
+#include <QTcpSocket>
+#include <QString>
 
 namespace Ui {
 class Registration;
@@ -12,7 +15,7 @@ class Registration : public QWidget
     Q_OBJECT
 
 public:
-    explicit Registration(QWidget *parent = nullptr);
+    explicit Registration(QWidget *parent, QTcpSocket* socket);
     ~Registration();
 
 private slots:
@@ -23,6 +26,7 @@ private slots:
 private:
     QWidget *parent;
     Ui::Registration *ui;
+    QTcpSocket* mSocket;
 };
 
 #endif // REGISTRATION_H
