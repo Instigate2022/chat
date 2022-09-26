@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>bg-01.jpg</file>
+        <file>TcpClient.pro</file>
+    </qresource>
+</RCC>

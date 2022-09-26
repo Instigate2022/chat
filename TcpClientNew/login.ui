@@ -28,6 +28,9 @@
   <property name="windowTitle">
    <string>Login</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-image: url(:/new/prefix1/bg-01.jpg);</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -63,6 +66,7 @@
        <property name="font">
         <font>
          <pointsize>20</pointsize>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -97,8 +101,9 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">  border-radius: 5px;
-border:0.5px solid grey;</string>
+          <string notr="true">border-radius: 5px;
+border:0.5px solid grey;
+background:white;</string>
          </property>
          <property name="text">
           <string/>
@@ -127,9 +132,9 @@ border:0.5px solid grey;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">  border-radius: 5px;
+          <string notr="true">border-radius: 5px;
 border:0.5px solid grey;
-</string>
+background:white;</string>
          </property>
          <property name="echoMode">
           <enum>QLineEdit::Password</enum>
@@ -221,6 +226,7 @@ background-color: #424242;
          <property name="font">
           <font>
            <pointsize>12</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

@@ -52,6 +52,7 @@ int main()
     serv_addres.sin_family = AF_INET;
 
     serv_addres.sin_addr.s_addr = htons(INADDR_ANY);
+}
 
 
     bind(server, (struct sockaddr*)&serv_addres,sizeof(serv_addres));
@@ -77,9 +78,13 @@ vector <string> split(string a, string b) {
 	string popox;
 	for(int i = 0; i < a.size(); i++) {
 		if (a[i] != b) {
-			popox += a[i]
-		} 	
+			popox += a[i];
+		else:
+			matr.push_back(popox);
+			popox = "";
+		}
 	}
+	matr.push_back(popox);
 }
 
 void ClientConnect(int client)
