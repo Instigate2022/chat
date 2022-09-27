@@ -71,19 +71,23 @@ int main()
     }
 }
 
-vector <string> split(string a, char b) {
+vector<string> split(string a, char b)
+{
+    cout << "In split function " << a << '\n';
 	vector<string> matr;
 	string popox = "";
+    cout << "START FOR\n";
 	for(int i = 0; i < a.size(); i++) {
 		if (a[i] != b) {
 			popox += a[i];
         }
 		else {
 			matr.push_back(popox);
-			popox.clear();
+			popox = "";
 		}
 	}
-	matr.push_back(popox);
+    matr.push_back(popox);
+    return matr;
 }
 
 void ClientConnect(int client)
@@ -92,9 +96,12 @@ void ClientConnect(int client)
     char buffer[buf_s];
     memset(&buffer, 0, sizeof(buffer));
     recv(client, buffer, buf_s, 0);
-    string name = buffer;
-    cout << "Name: " << name << '\n';
-
+    string message = buffer;
+    cout << "New Message" << message << '\n';
+    vector<string> splited = split(message, ' ');
+    for (int i = 0; i < splited.size(); i++) {
+        cout << i << " " << splited[i] << '\n';
+    }
     thread thSend(Send, client, &isExit);
     thread thRecv(Recv, client, &isExit);
     thSend.join();
