@@ -52,8 +52,6 @@ int main()
     serv_addres.sin_family = AF_INET;
 
     serv_addres.sin_addr.s_addr = htons(INADDR_ANY);
-}
-
 
     bind(server, (struct sockaddr*)&serv_addres,sizeof(serv_addres));
     cout << "stacvec bind anel " << endl;
@@ -73,15 +71,16 @@ int main()
     }
 }
 
-vector <string> split(string a, string b) {
-	vector<string> matr;  
-	string popox;
+vector <string> split(string a, char b) {
+	vector<string> matr;
+	string popox = "";
 	for(int i = 0; i < a.size(); i++) {
 		if (a[i] != b) {
 			popox += a[i];
-		else:
+        }
+		else {
 			matr.push_back(popox);
-			popox = "";
+			popox.clear();
 		}
 	}
 	matr.push_back(popox);
@@ -91,21 +90,16 @@ void ClientConnect(int client)
 {
     bool isExit = false;
     char buffer[buf_s];
+    memset(&buffer, 0, sizeof(buffer));
     recv(client, buffer, buf_s, 0);
     string name = buffer;
     cout << "Name: " << name << '\n';
 
-    Client *user = new Client(name, password);
-    list_clients.push_back(user);
     thread thSend(Send, client, &isExit);
     thread thRecv(Recv, client, &isExit);
     thSend.join();
     thRecv.join();
-    
-
 }
-std::vector <Client*> client_list;
-
 
 
 void Send(int client, bool *isExit)

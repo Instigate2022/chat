@@ -21,8 +21,10 @@ void Registration::on_btn_reg_clicked()
         QMessageBox::warning(this, "Registration failed!", "Password is not equal Confirm");
         return;
     }
+
     std::string message = ui->input_name->text().toStdString();
     message += " " + ui->input_pass->text().toStdString();
+
     QTextStream T(mSocket);
     T << message.c_str();
     mSocket->flush();
