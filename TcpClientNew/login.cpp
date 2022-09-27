@@ -41,6 +41,7 @@ void Login::on_btn_login_clicked()
    mSocket->flush();
 
 
+
    wind_chat = new Chat(this);
    wind_chat->show();
    this->close();

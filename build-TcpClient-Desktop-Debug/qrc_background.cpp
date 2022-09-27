@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Resource object code
 **
-** Created by: The Resource Compiler for Qt version 5.15.3
+** Created by: The Resource Compiler for Qt version 5.9.5
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
 static const unsigned char qt_resource_data[] = {
-  // /home/gevorg/Desktop/chat/TcpClientNew/TcpClient.pro
+  // /home/aghas_mheryan/chat/TcpClientNew/TcpClient.pro
   0x0,0x0,0x2,0xe4,
   0x51,
   0x54,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x2b,0x3d,0x20,0x63,0x6f,0x72,0x65,0x20,
@@ -57,7 +57,7 @@ static const unsigned char qt_resource_data[] = {
   0xa,0x52,0x45,0x53,0x4f,0x55,0x52,0x43,0x45,0x53,0x20,0x2b,0x3d,0x20,0x5c,0xa,
   0x20,0x20,0x20,0x20,0x62,0x61,0x63,0x6b,0x67,0x72,0x6f,0x75,0x6e,0x64,0x2e,0x71,
   0x72,0x63,0xa,
-    // /home/gevorg/Desktop/chat/TcpClientNew/bg-01.jpg
+    // /home/aghas_mheryan/chat/TcpClientNew/bg-01.jpg
   0x0,0x0,0x84,0xf2,
   0x0,
   0x1,0xbe,0x60,0x78,0x9c,0xec,0x7d,0x9,0x40,0x53,0x57,0xba,0x7f,0x5a,0x6d,0xad,
@@ -2227,10 +2227,10 @@ static const unsigned char qt_resource_struct[] = {
 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
   // :/new/prefix1/bg-01.jpg
   0x0,0x0,0x0,0x40,0x0,0x1,0x0,0x0,0x0,0x1,0x0,0x0,0x2,0xe8,
-0x0,0x0,0x1,0x83,0x7b,0x6b,0x65,0xa6,
+0x0,0x0,0x1,0x83,0x7d,0xe6,0xc7,0xf9,
   // :/new/prefix1/TcpClient.pro
   0x0,0x0,0x0,0x20,0x0,0x0,0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x0,
-0x0,0x0,0x1,0x83,0x7b,0x69,0x5e,0xe0,
+0x0,0x0,0x1,0x83,0x7d,0xe6,0xc7,0xf9,
 
 };
 
@@ -2251,17 +2251,8 @@ namespace QT_NAMESPACE {
 #endif
 
 bool qRegisterResourceData(int, const unsigned char *, const unsigned char *, const unsigned char *);
-bool qUnregisterResourceData(int, const unsigned char *, const unsigned char *, const unsigned char *);
 
-#if defined(__ELF__) || defined(__APPLE__)
-static inline unsigned char qResourceFeatureZlib()
-{
-    extern const unsigned char qt_resourceFeatureZlib;
-    return qt_resourceFeatureZlib;
-}
-#else
-unsigned char qResourceFeatureZlib();
-#endif
+bool qUnregisterResourceData(int, const unsigned char *, const unsigned char *, const unsigned char *);
 
 #ifdef QT_NAMESPACE
 }
@@ -2270,19 +2261,16 @@ unsigned char qResourceFeatureZlib();
 int QT_RCC_MANGLE_NAMESPACE(qInitResources_background)();
 int QT_RCC_MANGLE_NAMESPACE(qInitResources_background)()
 {
-    int version = 3;
     QT_RCC_PREPEND_NAMESPACE(qRegisterResourceData)
-        (version, qt_resource_struct, qt_resource_name, qt_resource_data);
+        (0x2, qt_resource_struct, qt_resource_name, qt_resource_data);
     return 1;
 }
 
 int QT_RCC_MANGLE_NAMESPACE(qCleanupResources_background)();
 int QT_RCC_MANGLE_NAMESPACE(qCleanupResources_background)()
 {
-    int version = 3;
-    version += QT_RCC_PREPEND_NAMESPACE(qResourceFeatureZlib());
     QT_RCC_PREPEND_NAMESPACE(qUnregisterResourceData)
-       (version, qt_resource_struct, qt_resource_name, qt_resource_data);
+       (0x2, qt_resource_struct, qt_resource_name, qt_resource_data);
     return 1;
 }
 

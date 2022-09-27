@@ -29,8 +29,8 @@ public:
     QVBoxLayout *verticalLayout_2;
     QLabel *label_welcom;
     QVBoxLayout *verticalLayout;
-    QHBoxLayout *horizontalLayout;
     QLineEdit *input_name;
+    QLabel *label_3;
     QHBoxLayout *horizontalLayout_2;
     QLineEdit *input_pass;
     QHBoxLayout *horizontalLayout_3;
@@ -50,7 +50,6 @@ public:
         Registration->setMaximumSize(QSize(743, 549));
         verticalLayout_2 = new QVBoxLayout(Registration);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        verticalLayout_2->setContentsMargins(100, -1, 100, -1);
         label_welcom = new QLabel(Registration);
         label_welcom->setObjectName(QStringLiteral("label_welcom"));
         label_welcom->setMinimumSize(QSize(100, 100));
@@ -65,21 +64,26 @@ public:
         verticalLayout_2->addWidget(label_welcom);
 
         verticalLayout = new QVBoxLayout();
-        verticalLayout->setSpacing(10);
+        verticalLayout->setSpacing(2);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalLayout->setContentsMargins(6, 6, 6, 6);
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         input_name = new QLineEdit(Registration);
         input_name->setObjectName(QStringLiteral("input_name"));
         input_name->setMinimumSize(QSize(0, 30));
         input_name->setStyleSheet(QLatin1String("  border-radius: 5px;\n"
 "border:0.5px solid grey;"));
 
-        horizontalLayout->addWidget(input_name);
+        verticalLayout->addWidget(input_name);
+
+        label_3 = new QLabel(Registration);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setEnabled(true);
+        label_3->setMaximumSize(QSize(16777215, 15));
+        label_3->setScaledContents(false);
+
+        verticalLayout->addWidget(label_3);
 
 
-        verticalLayout->addLayout(horizontalLayout);
+        verticalLayout_2->addLayout(verticalLayout);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -93,7 +97,7 @@ public:
         horizontalLayout_2->addWidget(input_pass);
 
 
-        verticalLayout->addLayout(horizontalLayout_2);
+        verticalLayout_2->addLayout(horizontalLayout_2);
 
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
@@ -107,14 +111,14 @@ public:
         horizontalLayout_3->addWidget(input_conf);
 
 
-        verticalLayout->addLayout(horizontalLayout_3);
+        verticalLayout_2->addLayout(horizontalLayout_3);
 
         label_2 = new QLabel(Registration);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setMinimumSize(QSize(0, 20));
         label_2->setMaximumSize(QSize(16777215, 20));
 
-        verticalLayout->addWidget(label_2);
+        verticalLayout_2->addWidget(label_2);
 
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
@@ -163,17 +167,14 @@ public:
         horizontalLayout_4->addWidget(btn_cancel);
 
 
-        verticalLayout->addLayout(horizontalLayout_4);
+        verticalLayout_2->addLayout(horizontalLayout_4);
 
         label = new QLabel(Registration);
         label->setObjectName(QStringLiteral("label"));
         label->setMinimumSize(QSize(0, 70));
         label->setMaximumSize(QSize(16777215, 70));
 
-        verticalLayout->addWidget(label);
-
-
-        verticalLayout_2->addLayout(verticalLayout);
+        verticalLayout_2->addWidget(label);
 
 
         retranslateUi(Registration);
@@ -186,6 +187,7 @@ public:
         Registration->setWindowTitle(QApplication::translate("Registration", "Form", Q_NULLPTR));
         label_welcom->setText(QApplication::translate("Registration", "Registration", Q_NULLPTR));
         input_name->setPlaceholderText(QApplication::translate("Registration", "Name", Q_NULLPTR));
+        label_3->setText(QString());
         input_pass->setPlaceholderText(QApplication::translate("Registration", "Password", Q_NULLPTR));
         input_conf->setPlaceholderText(QApplication::translate("Registration", "Confirm", Q_NULLPTR));
         label_2->setText(QString());
