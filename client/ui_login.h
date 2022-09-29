@@ -42,7 +42,7 @@ public:
         Login->setMinimumSize(QSize(743, 549));
         Login->setMaximumSize(QSize(743, 549));
         Login->setContextMenuPolicy(Qt::PreventContextMenu);
-        Login->setStyleSheet(QString::fromUtf8("background-image: url(:/new/prefix1/bg-01.jpg);"));
+        Login->setStyleSheet(QString::fromUtf8(""));
         verticalLayoutWidget = new QWidget(Login);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
         verticalLayoutWidget->setGeometry(QRect(0, 0, 751, 551));

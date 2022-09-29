@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "client.hpp"
+#include "chat.h"
 
 bool Client::connect(std::string IP, int Port) {
     struct sockaddr_in server_addres;
@@ -57,8 +58,8 @@ bool Client::registration(std::string login, std::string password)
         return true;
     }
     return false;
-
 }
+
 /*
 bool Client::Send(bool *isExit)
 {
@@ -93,6 +94,5 @@ void Client::Send(std::string message) {
     char buffer[buf_s];
     memset(buffer, 0, buf_s);
     strcpy(buffer, message.c_str());
-    std::cout << 
     send(serverSocket, buffer, buf_s, 0);
 }

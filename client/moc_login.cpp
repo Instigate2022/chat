@@ -22,7 +22,7 @@ static const uint qt_meta_data_Login[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,13 +32,16 @@ static const uint qt_meta_data_Login[] = {
  // slots: signature, parameters, type, tag, flags
        7,    6,    6,    6, 0x08,
       30,    6,    6,    6, 0x08,
+      51,    6,    6,    6, 0x08,
+      81,   75,    6,    6, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_Login[] = {
     "Login\0\0on_btn_login_clicked()\0"
-    "on_btn_reg_clicked()\0"
+    "on_btn_reg_clicked()\0on_btn_logOut_clicked()\0"
+    "event\0closeEvent(QCloseEvent*)\0"
 };
 
 void Login::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -49,10 +52,10 @@ void Login::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         switch (_id) {
         case 0: _t->on_btn_login_clicked(); break;
         case 1: _t->on_btn_reg_clicked(); break;
+        case 3: _t->closeEvent((*reinterpret_cast< QCloseEvent*(*)>(_a[1]))); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 const QMetaObjectExtraData Login::staticMetaObjectExtraData = {
@@ -87,9 +90,9 @@ int Login::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 4;
     }
     return _id;
 }

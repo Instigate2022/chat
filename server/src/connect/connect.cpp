@@ -75,7 +75,7 @@ bool Send(int client, bool *isExit)
         cin.getline(buffer, buf_s);
         send(client, buffer, buf_s, 0);
         int index = std::string(buffer).find("#");
-        if (index > 0) {
+        if (index >= 0) {
             return true;
         }
     }
@@ -89,7 +89,7 @@ bool Recv(int client, bool *isExit)
         recv(client, buffer, buf_s, 0);
         cout << buffer << '\n';
         int index = std::string(buffer).find("#");
-        if (index > 0) {
+        if (index >= 0) {
             return true;
         }
     }

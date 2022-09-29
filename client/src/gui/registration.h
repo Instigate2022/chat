@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QMessageBox>
 #include <QString>
-#include "client.hpp"
+#include "../engine/client.hpp"
 
 namespace Ui {
 class Registration;

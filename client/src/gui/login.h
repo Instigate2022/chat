@@ -7,7 +7,7 @@
 
 #include "chat.h"
 #include "registration.h"
-#include "client.hpp"
+#include "../engine/client.hpp"
 #include <QThread>
 
 QT_BEGIN_NAMESPACE
@@ -27,6 +27,10 @@ private slots:
     void on_btn_login_clicked();
 
     void on_btn_reg_clicked();
+
+    void on_btn_logOut_clicked();
+
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::Login *ui;

@@ -2,7 +2,9 @@
 #define CHAT_H
 
 #include <QWidget>
-#include "client.hpp"
+#include <QCloseEvent>
+#include <QMessageBox>
+#include "../engine/client.hpp"
 
 namespace Ui {
 class Chat;
@@ -22,6 +24,8 @@ private slots:
     void on_btn_send_clicked();
 
     void on_btn_logOut_clicked();
+
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::Chat *ui;

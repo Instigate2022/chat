@@ -5,6 +5,9 @@ Registration::Registration(QWidget *parent, Client *client) :
     QWidget(),
     ui(new Ui::Registration)
 {
+    QLabel *myLabel = new QLabel(this);
+    myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg"));
+    myLabel->show();
     this->client = client;
     this->parent = parent;
     ui->setupUi(this);
@@ -22,14 +25,14 @@ void Registration::on_btn_reg_clicked()
         return;
     }
     client->registration(ui->input_name->text().toStdString(), ui->input_pass->text().toStdString());
-    this->close();
+    this->hide();
     parent->show();
 }
 
 
 void Registration::on_btn_cancel_clicked()
 {
-    this->close();
+    this->hide();
     parent->show();
 }
 
