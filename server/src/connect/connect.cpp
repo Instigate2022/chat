@@ -43,7 +43,11 @@ void ClientConnect(int client)
     memset(&buffer, 0, sizeof(buffer));
     recv(client, buffer, buf_s, 0);
     string message = buffer;
-    cout << "New Message" << message << '\n';
+    cout << "New Message " << message << '\n';
+    int index = std::string(buffer).find("#");
+    if (index >= 0) {
+        return;
+    }
     vector<string> splited = split(message, ' ');
     std::string msg = "Ok";
     send(client, msg.c_str(), msg.size(), 0);
@@ -56,30 +60,38 @@ void ClientConnect(int client)
         clients_list.addClient(client);
     }
     cout << "Connected clients: " << clients_list.size() << '\n';
-    thread thSend(Send, client, &isExit);
-    thread thRecv(Recv, client, &isExit);
+    thread thSend([&](){isExit = Send(client, &isExit);});
+    thread thRecv([&](){isExit = Recv(client, &isExit);});
     thSend.join();
     thRecv.join();
 }
 
 
-void Send(int client, bool *isExit)
+bool Send(int client, bool *isExit)
 {
     while(!*isExit) {
         char buffer[buf_s];
         memset(&buffer, 0, sizeof(buffer));
         cin.getline(buffer, buf_s);
         send(client, buffer, buf_s, 0);
+        int index = std::string(buffer).find("#");
+        if (index > 0) {
+            return true;
+        }
     }
 }
 
-void Recv(int client, bool *isExit)
+bool Recv(int client, bool *isExit)
 {
     while(!*isExit) {
         char buffer[buf_s];
         memset(&buffer, 0, sizeof(buffer));
         recv(client, buffer, buf_s, 0);
         cout << buffer << '\n';
+        int index = std::string(buffer).find("#");
+        if (index > 0) {
+            return true;
+        }
     }
 }
 

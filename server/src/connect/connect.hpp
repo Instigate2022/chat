@@ -23,8 +23,8 @@
 using namespace std;
 
 void ClientConnect(int client);
-void Send(int client, bool *isExit);
-void Recv(int client, bool *isExit);
+bool Send(int client, bool *isExit);
+bool Recv(int client, bool *isExit);
 vector<string> split(string a, char b);
 
 #endif
