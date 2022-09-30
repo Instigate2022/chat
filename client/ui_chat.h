@@ -30,7 +30,7 @@ class Ui_Chat
 {
 public:
     QHBoxLayout *horizontalLayout_3;
-    QListView *list_users;
+    QListWidget *list_users;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_name;
@@ -49,7 +49,7 @@ public:
         Chat->resize(809, 518);
         horizontalLayout_3 = new QHBoxLayout(Chat);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-        list_users = new QListView(Chat);
+        list_users = new QListWidget(Chat);
         list_users->setObjectName(QString::fromUtf8("list_users"));
         list_users->setMaximumSize(QSize(200, 16777215));
 

@@ -13,11 +13,10 @@
 #include <iostream>
 #include <cstring>
 #include <thread>
-#include <map>
 #include <vector>
-#include <map>
+#include <fstream>
 
-#define PORT 1236
+#define PORT 1235
 #define buf_s 1024
 
 using namespace std;
@@ -26,5 +25,8 @@ void ClientConnect(int client);
 bool Send(int client, bool *isExit);
 bool Recv(int client, bool *isExit);
 vector<string> split(string a, char b);
+
+bool ClientLogin(int client, std::string login, std::string pass);
+void Registration(int client, std::string login, std::string pass);
 
 #endif

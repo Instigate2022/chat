@@ -17,6 +17,8 @@ class Chat : public QWidget
 public:
     explicit Chat(QWidget *parent, Client *client);
     ~Chat();
+    void set_list_message(std::string msg);
+    void set_users_list(std::string name);
 
 private slots:
     void on_btn_file_clicked();

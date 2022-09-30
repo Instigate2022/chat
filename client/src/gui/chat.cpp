@@ -1,6 +1,7 @@
 #include "chat.h"
 #include "ui_chat.h"
 #include <QLabel>
+#include <QListView>
 #include <QListWidgetItem>
 #include <string>
 Chat::Chat(QWidget *parent, Client *client) :
@@ -10,8 +11,10 @@ Chat::Chat(QWidget *parent, Client *client) :
     QLabel *myLabel = new QLabel(this);
     myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg"));
     myLabel->show();
-    this->client = client;
     ui->setupUi(this);
+    client->set_chat_window(this);
+    this->client = client;
+    ui->list_users->addItem("Server");
 }
 
 Chat::~Chat()
@@ -27,7 +30,8 @@ void Chat::on_btn_file_clicked()
 void Chat::on_btn_send_clicked()
 {
     std::string message = ui->input_msg->text().toStdString();
-    client->Send(message);
+    std::string to_whom = ui->list_users->currentItem()->text().toStdString();
+    client->Send(message, to_whom);
     QListWidgetItem *item = new QListWidgetItem();
     item->setTextAlignment(Qt::AlignRight);
     item->setText(message.c_str());
@@ -44,8 +48,18 @@ void Chat::closeEvent(QCloseEvent *event)
     if(resBtn != QMessageBox::Yes) {
             event->ignore();
     } else {
-            client->Send("#");
+            client->Send("#", "Server");
             event->accept();
     }
 }
 
+void Chat::set_list_message(std::string message)
+{
+    ui->list_chat->insertItem(0, message.c_str());
+}
+
+void Chat::set_users_list(std::string name)
+{
+    std::cout << "Add " << name << " In List Widget\n";
+    ui->list_users->addItem(name.c_str());
+}

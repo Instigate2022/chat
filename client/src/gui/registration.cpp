@@ -24,9 +24,12 @@ void Registration::on_btn_reg_clicked()
         QMessageBox::warning(this, "Registration failed!", "Password is not equal Confirm");
         return;
     }
-    client->registration(ui->input_name->text().toStdString(), ui->input_pass->text().toStdString());
-    this->hide();
-    parent->show();
+    if(client->registration(ui->input_name->text().toStdString(), ui->input_pass->text().toStdString())) {
+        this->hide();
+        parent->show();
+    } else {
+        QMessageBox::warning(this, "Registration failed!", "User with this login is exist");
+    }
 }
 
 
