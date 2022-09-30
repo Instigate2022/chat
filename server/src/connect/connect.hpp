@@ -16,7 +16,7 @@
 #include <vector>
 #include <fstream>
 
-#define PORT 1235
+#define PORT 1234
 #define buf_s 1024
 
 using namespace std;

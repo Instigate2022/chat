@@ -6,7 +6,6 @@
 #include <QMessageBox>
 #include "../engine/client.hpp"
 
-
 namespace Ui {
 class Chat;
 }
@@ -16,7 +15,7 @@ class Chat : public QWidget
     Q_OBJECT
 
 public:
-    explicit Chat(void *parent, Client *client);
+    explicit Chat(QWidget *parent, Client *client);
     ~Chat();
     void set_list_message(std::string msg);
     void set_users_list(std::string name);
@@ -32,7 +31,6 @@ private slots:
 
 private:
     Ui::Chat *ui;
-    void *login_wind;
     Client *client;
 };
 

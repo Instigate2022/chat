@@ -21,6 +21,9 @@ struct ClientsList
 
     void addClient(Client* client) {
         list.push_back(client);
+        for (int i = 0; i < list.size(); ++i) {
+            std::cout << i << " client: " << list[i]->name << '\n';
+        }
     }
 
     int size() {
@@ -150,7 +153,7 @@ void Registration(int client, std::string login, std::string pass)
     send(client, buffer, sizeof(buffer), 0);
 }
 
-bool Send(int client, bool *isExit)
+void addConnectedClients(int client)
 {
     for(int i = 0; i < clients_list.size() - 1; ++i) {
         char buffer[buf_s];
@@ -161,7 +164,11 @@ bool Send(int client, bool *isExit)
         strcpy(buffer, messageForClient.c_str());
         send(client, buffer, buf_s, 0);
     }
+}
 
+bool Send(int client, bool *isExit)
+{
+    addConnectedClients(client);
     while(!*isExit) {
         char buffer[buf_s];
         memset(&buffer, 0, sizeof(buffer));
@@ -198,16 +205,18 @@ bool Recv(int client, bool *isExit)
             memset(&buffer, 0, sizeof(buffer));
             strcpy(buffer, message.c_str());
             std::cout << "Clients List Szie: " <<  clients_list.size() << '\n';
+            std::cout << "Splited[0] =" << splited[0] << ".\n";
             Client* user = clients_list.getClientByName(splited[0]);
-            if (user == nullptr) {
-                std::cout << "User = nullptr\n";
-                continue;
+            if (user != nullptr) {
+                std::cout << "User != nullptr\n";
+                send(user->socket, buffer, buf_s, 0);
             }
-            send(user->socket, buffer, buf_s, 0);
         }
-        if (isExit) {
+        if (*isExit) {
             Client* user = clients_list.getClientBySocket(client);
+            std::cout << "Remove user: " << user->name << '\n';
             clients_list.remove(user);
+            std::cout << "Removed. Connected Clients: " << clients_list.size() << '\n';
         }
     }
 }

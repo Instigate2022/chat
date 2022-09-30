@@ -7,7 +7,7 @@
 #include <string.h>
 
 #include "client.hpp"
-#include "../gui/chat.h"
+#include "chat.h"
 
 bool Client::connect(std::string IP, int Port) {
     struct sockaddr_in server_addres;

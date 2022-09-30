@@ -125,7 +125,7 @@ border:0.5px solid grey;</string>
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLineEdit" name="input_conf">
        <property name="minimumSize">
@@ -168,7 +168,7 @@ border:0.5px solid grey;</string>
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_4">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QPushButton" name="btn_reg">
        <property name="minimumSize">

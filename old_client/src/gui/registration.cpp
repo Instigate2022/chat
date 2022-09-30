@@ -21,18 +21,14 @@ Registration::~Registration()
 void Registration::on_btn_reg_clicked()
 {
     if(ui->input_pass->text() != ui->input_conf->text()) {
-       // QMessageBox::warning(this, "Registration failed!", "Password is not equal Confirm");
-	    ui->label_3->setText("Password is not equal Confirm");
-	    ui->label_3->setStyleSheet("QLabel { color : red; }");
+        QMessageBox::warning(this, "Registration failed!", "Password is not equal Confirm");
         return;
     }
     if(client->registration(ui->input_name->text().toStdString(), ui->input_pass->text().toStdString())) {
         this->hide();
         parent->show();
     } else {
-	    ui->label_3->setText("User with this login is exist");
-	    ui->label_3->setStyleSheet("QLabel { color : red; }");
-       // QMessageBox::warning(this, "Registration failed!", "User with this login is exist");
+        QMessageBox::warning(this, "Registration failed!", "User with this login is exist");
     }
 }
 

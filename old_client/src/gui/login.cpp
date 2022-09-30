@@ -30,7 +30,6 @@ void Login::on_btn_login_clicked()
     message += ui->input_login->text().toStdString();
     message += " " + ui->input_pass->text().toStdString();
     std::cout << message << '\n';
-    /*
     int spaces = 0;
     for (int i = 0; i < message.size(); i++) {
         if (message[i] == ' ') {
@@ -42,7 +41,7 @@ void Login::on_btn_login_clicked()
     if(spaces > 2) {
         QMessageBox::warning(this, "Login failed!", "Login or Password are incorrect");
         return;
-    }*/
+    }
     if (client->login(ui->input_login->text().toStdString(), ui->input_pass->text().toStdString())) {
         std::thread th1([&](){client->run();});
         th1.detach();

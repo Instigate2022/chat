@@ -33,10 +33,10 @@ public:
     QLabel *label_3;
     QHBoxLayout *horizontalLayout_2;
     QLineEdit *input_pass;
-    QVBoxLayout *verticalLayout_3;
+    QHBoxLayout *horizontalLayout_3;
     QLineEdit *input_conf;
     QLabel *label_2;
-    QVBoxLayout *verticalLayout_4;
+    QHBoxLayout *horizontalLayout_4;
     QPushButton *btn_reg;
     QPushButton *btn_cancel;
     QLabel *label;
@@ -99,8 +99,8 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout_2);
 
-        verticalLayout_3 = new QVBoxLayout();
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         input_conf = new QLineEdit(Registration);
         input_conf->setObjectName(QString::fromUtf8("input_conf"));
         input_conf->setMinimumSize(QSize(0, 30));
@@ -108,10 +108,10 @@ public:
 "border:0.5px solid grey;"));
         input_conf->setEchoMode(QLineEdit::Password);
 
-        verticalLayout_3->addWidget(input_conf);
+        horizontalLayout_3->addWidget(input_conf);
 
 
-        verticalLayout_2->addLayout(verticalLayout_3);
+        verticalLayout_2->addLayout(horizontalLayout_3);
 
         label_2 = new QLabel(Registration);
         label_2->setObjectName(QString::fromUtf8("label_2"));
@@ -120,8 +120,8 @@ public:
 
         verticalLayout_2->addWidget(label_2);
 
-        verticalLayout_4 = new QVBoxLayout();
-        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
         btn_reg = new QPushButton(Registration);
         btn_reg->setObjectName(QString::fromUtf8("btn_reg"));
         btn_reg->setMinimumSize(QSize(430, 20));
@@ -142,7 +142,7 @@ public:
 "\n"
 "}"));
 
-        verticalLayout_4->addWidget(btn_reg);
+        horizontalLayout_4->addWidget(btn_reg);
 
         btn_cancel = new QPushButton(Registration);
         btn_cancel->setObjectName(QString::fromUtf8("btn_cancel"));
@@ -164,10 +164,10 @@ public:
 "\n"
 "}"));
 
-        verticalLayout_4->addWidget(btn_cancel);
+        horizontalLayout_4->addWidget(btn_cancel);
 
 
-        verticalLayout_2->addLayout(verticalLayout_4);
+        verticalLayout_2->addLayout(horizontalLayout_4);
 
         label = new QLabel(Registration);
         label->setObjectName(QString::fromUtf8("label"));
