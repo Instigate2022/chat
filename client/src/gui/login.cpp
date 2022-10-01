@@ -18,10 +18,6 @@ Login::Login(QWidget *parent)
     myLabel->show();
     client = new Client();
     ui->setupUi(this);
-    if (!client->connect("127.0.0.1", 1234)) {
-        QMessageBox::critical(this, "Connect Error", "Dont connected, try again");
-        exit(0);
-    }
 }
 
 Login::~Login()
@@ -32,6 +28,9 @@ Login::~Login()
 
 void Login::on_btn_login_clicked()
 {
+    if (!client->connect("127.0.0.1", 1234)) {
+        QMessageBox::critical(this, "Connect Error", "Dont connected, try again");
+    }
     std::cout << "Start Login\n";
     std::string message = "{?} ";
     message += ui->input_login->text().toStdString();
@@ -82,7 +81,7 @@ void Login::closeEvent(QCloseEvent *event)
     if(resBtn != QMessageBox::Yes) {
         event->ignore();
     } else {
-        client->Send("#", "Server");
+        client->disconnect();
         event->accept();
     }
 }

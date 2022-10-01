@@ -22,6 +22,7 @@ public:
     void Send(std::string message, std::string to_whom);
     bool Recv(bool *isExit);
     void set_chat_window(void *window);
+    void disconnect();
     std::vector<std::string> split(std::string msg, char split_char);
 };
 

@@ -150,3 +150,11 @@ std::vector<std::string> Client::split(std::string msg, char split_char)
     list.push_back(str);
     return list;
 }
+
+void Client::disconnect()
+{
+    std::string message = "{#} " + name;
+    char buffer[buf_s];
+    strcpy(buffer, message.c_str());
+    send(serverSocket, buffer, buf_s, 0);
+}

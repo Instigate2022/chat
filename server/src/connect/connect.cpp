@@ -192,17 +192,20 @@ bool Recv(int client, bool *isExit)
         memset(&buffer, 0, sizeof(buffer));
         recv(client, buffer, buf_s, 0);
         std::string message = buffer;
-        int index = message.find("#");
-        if (index >= 0) {
+        vector<string> splited = split(message, ' ');
+        if (splited[0] == "{#}") {
             std::cout << "Client: " << client << " Disconnected\n";
             *isExit = true;
         }
-        vector<string> splited = split(message, ' ');
         std::cout << "Splited size: " << splited.size() << '\n';
         for (int i = 0; i < splited.size(); ++i) {
             std::cout << i << " " << splited[i] << '\n';
         }
         if (splited.size() >= 2) {
+            if (splited[0] == "{?}") {
+                ClientLogin(client, splited[1], splited[2]);
+                continue;
+            }
             message.erase(0, message.find_first_of(" ") + 1);
             std::cout << "Message = " << message << '\n';
             memset(&buffer, 0, sizeof(buffer));

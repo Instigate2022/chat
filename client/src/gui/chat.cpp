@@ -36,10 +36,11 @@ void Chat::on_btn_logOut_clicked()
 
     if(mesBtn == QMessageBox::Yes) {
         Login *window = (Login* )login_wind;
+        client->disconnect();
         window->show();
         this->hide();
     } else {
-            client->Send("Log out", "Server");
+
     }
 }
 
@@ -69,7 +70,7 @@ void Chat::closeEvent(QCloseEvent *event)
     if(resBtn != QMessageBox::Yes) {
             event->ignore();
     } else {
-            client->Send("#", "Server");
+            client->disconnect();
             event->accept();
     }
 }
