@@ -192,30 +192,24 @@ bool Recv(int client, bool *isExit)
         memset(&buffer, 0, sizeof(buffer));
         recv(client, buffer, buf_s, 0);
         std::string message = buffer;
+        std::cout << "Message: " << message << '\n';
         vector<string> splited = split(message, ' ');
+        if (message.size() == 0) {
+            *isExit = true;
+        }
         if (splited[0] == "{#}") {
             std::cout << "Client: " << client << " Disconnected\n";
             *isExit = true;
         }
-        std::cout << "Splited size: " << splited.size() << '\n';
-        for (int i = 0; i < splited.size(); ++i) {
-            std::cout << i << " " << splited[i] << '\n';
-        }
-        if (splited.size() >= 2) {
+        if (splited.size() > 2) {
             if (splited[0] == "{?}") {
                 ClientLogin(client, splited[1], splited[2]);
                 continue;
             }
             message.erase(0, message.find_first_of(" ") + 1);
-            std::cout << "Message = " << message << '\n';
-            memset(&buffer, 0, sizeof(buffer));
-            strcpy(buffer, message.c_str());
-            std::cout << "Clients List Szie: " <<  clients_list.size() << '\n';
-            std::cout << "Splited[0] =" << splited[0] << ".\n";
             Client* user = clients_list.getClientByName(splited[0]);
             if (user != nullptr) {
-                std::cout << "User != nullptr\n";
-                send(user->socket, buffer, buf_s, 0);
+                send(user->socket, message.c_str(), message.size(), 0);
             }
         }
         if (*isExit) {
