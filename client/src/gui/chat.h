@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QList>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include "../engine/client.hpp"
 
 
@@ -29,6 +32,8 @@ private slots:
     void on_btn_logOut_clicked();
 
     void closeEvent(QCloseEvent *event);
+
+    void on_list_users_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
     Ui::Chat *ui;

@@ -5,6 +5,7 @@
 #include <QTextStream>
 #include <iostream>
 #include <QDesktopWidget>
+#include <QListWidget>
 
 #include "chat.h"
 #include "registration.h"
@@ -14,6 +15,15 @@
 QT_BEGIN_NAMESPACE
 namespace Ui { class Login; }
 QT_END_NAMESPACE
+
+struct User
+{
+    User(std::string name, QListWidget *chat, bool isOnline);
+
+    std::string name;
+    QListWidget* chat = nullptr;
+    bool isOnline;
+};
 
 class Login : public QWidget
 {

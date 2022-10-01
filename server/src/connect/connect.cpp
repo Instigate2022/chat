@@ -173,6 +173,9 @@ bool Send(int client, bool *isExit)
         char buffer[buf_s];
         memset(&buffer, 0, sizeof(buffer));
         cin.getline(buffer, buf_s);
+        std::string message = "Server: " + std::string(buffer);
+        memset(&buffer, 0, sizeof(buffer));
+        strcpy(buffer, message.c_str());
         send(client, buffer, buf_s, 0);
         int index = std::string(buffer).find("#");
         if (index >= 0) {
