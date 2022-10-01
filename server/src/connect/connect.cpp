@@ -168,7 +168,6 @@ void addConnectedClients(int client)
 
 bool Send(int client, bool *isExit)
 {
-    addConnectedClients(client);
     while(!*isExit) {
         char buffer[buf_s];
         memset(&buffer, 0, sizeof(buffer));
@@ -187,6 +186,7 @@ bool Send(int client, bool *isExit)
 
 bool Recv(int client, bool *isExit)
 {
+    addConnectedClients(client);
     while(!*isExit) {
         char buffer[buf_s];
         memset(&buffer, 0, sizeof(buffer));
@@ -213,11 +213,21 @@ bool Recv(int client, bool *isExit)
             }
         }
         if (*isExit) {
-            Client* user = clients_list.getClientBySocket(client);
-            std::cout << "Remove user: " << user->name << '\n';
-            clients_list.remove(user);
-            std::cout << "Removed. Connected Clients: " << clients_list.size() << '\n';
+            clientDisconnected(client);
         }
+    }
+}
+
+void clientDisconnected(int client)
+{
+    Client* user = clients_list.getClientBySocket(client);
+    std::cout << "Remove user: " << user->name << '\n';
+    clients_list.remove(user);
+    std::cout << "Connected Clients: " << clients_list.size() << '\n';
+    std::string message = "{#} " + user->name + " Disconnected\n";
+    for (int i = 0; i < clients_list.size(); ++i) {
+        Client* user = clients_list.getClientByIndex(i);
+        send(user->socket, message.c_str(), message.size(), 0);
     }
 }
 

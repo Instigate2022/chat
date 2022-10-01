@@ -6,6 +6,16 @@
 
 QList<User*> users;
 
+User* getUser(std::string name)
+{
+    for (int i = 0; i < users.size(); ++i) {
+        if (users[i]->name == name) {
+            return users[i];
+        }
+    }
+    return nullptr;
+}
+
 Chat::Chat(void *parent, Client *client) :
     QWidget(),
     ui(new Ui::Chat)
@@ -17,8 +27,9 @@ Chat::Chat(void *parent, Client *client) :
     ui->setupUi(this);
     client->set_chat_window(this);
     this->client = client;
-    ui->list_users->addItem("Server");
-    users.push_back(new User("Server", new QListWidget(), true));
+    QListWidgetItem *server_item = new QListWidgetItem("Server");
+    ui->list_users->addItem(server_item);
+    users.push_back(new User("Server", new QListWidget(), server_item, true));
     connect(ui->input_msg, SIGNAL(returnPressed), this, SLOT(on_btn_send_clicked));
 }
 
@@ -35,6 +46,7 @@ void Chat::on_btn_logOut_clicked()
                                     QMessageBox::Yes);
 
     if(mesBtn == QMessageBox::Yes) {
+        users.clear();
         Login *window = (Login* )login_wind;
         client->disconnect();
         window->show();
@@ -68,10 +80,11 @@ void Chat::closeEvent(QCloseEvent *event)
                                     QMessageBox::No | QMessageBox::Yes,
                                     QMessageBox::Yes);
     if(resBtn != QMessageBox::Yes) {
-            event->ignore();
+        event->ignore();
     } else {
-            client->disconnect();
-            event->accept();
+        users.clear();
+        client->disconnect();
+        event->accept();
     }
 }
 
@@ -84,17 +97,15 @@ void Chat::set_list_message(std::string message)
         name.erase(name.find_first_of(":"));
     }
     std::cout << "Name: " << name << '\n';
-    User *user = nullptr;
-    for (int i = 0; i < users.size(); ++i) {
-        if (users[i]->name == name) {
-            user = users[i];
-        }
-    }
+    User *user = getUser(name);
     if (user != nullptr) {
         if (user->chat == nullptr) {
             user->chat = new QListWidget();
         }
         user->chat->insertItem(0, message.c_str());
+        if (ui->list_users->currentItem() != user->item) {
+            user->item->setBackgroundColor(Qt::green);
+        }
         return;
     }
     ui->list_chat->insertItem(0, message.c_str());
@@ -103,9 +114,14 @@ void Chat::set_list_message(std::string message)
 void Chat::set_users_list(std::string name)
 {
     std::cout << "Add " << name << " In List Widget\n";
-    User *new_user = new User(name, nullptr, true);
-    users.push_back(new_user);
+    User* user = getUser(name);
+    if (user != nullptr) {
+        user->item->setBackgroundColor(Qt::white);
+        return;
+    }
     QListWidgetItem *user_item = new QListWidgetItem(name.c_str());
+    User *new_user = new User(name, nullptr, user_item, true);
+    users.push_back(new_user);
     ui->list_users->addItem(user_item);
     QListWidgetItem *prev = ui->list_users->currentItem();
     ui->list_users->setCurrentItem(user_item);
@@ -115,24 +131,27 @@ void Chat::set_users_list(std::string name)
 
 void Chat::on_list_users_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
-    std::cout << "\nChange chat called\n";
     std::string name = current->text().toStdString();
-    User *user = nullptr;
-    for (int i = 0; i < users.size(); ++i) {
-        if (users[i]->name == name) {
-            user = users[i];
-        }
-    }
+    User *user = getUser(name);
     if (user == nullptr) return;
     if (user->chat == nullptr) {
         user->chat = new QListWidget();
     }
-    std::cout << "User != nullptr\n";
     ui->list_chat->hide();
-    std::cout << "Hide prev chat\n";
     ui->list_chat = user->chat;
     ui->verticalLayout->insertWidget(1, ui->list_chat);
-    std::cout << "Show new chat\n";
+    if (user->isOnline) {
+        user->item->setBackgroundColor(Qt::white);
+    } else {
+        user->item->setBackgroundColor(Qt::red);
+    }
     ui->list_chat->show();
+}
+
+void Chat::client_disconnected(std::string name)
+{
+    User* user = getUser(name);
+    user->isOnline = false;
+    user->item->setBackgroundColor(Qt::red);
 }
 

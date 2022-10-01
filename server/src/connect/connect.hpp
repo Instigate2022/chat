@@ -28,5 +28,6 @@ vector<string> split(string a, char b);
 
 bool ClientLogin(int client, std::string login, std::string pass);
 void Registration(int client, std::string login, std::string pass);
+void clientDisconnected(int client);
 
 #endif

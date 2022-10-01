@@ -23,6 +23,7 @@ public:
     ~Chat();
     void set_list_message(std::string msg);
     void set_users_list(std::string name);
+    void client_disconnected(std::string name);
 
 private slots:
     void on_btn_file_clicked();

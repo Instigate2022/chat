@@ -2,10 +2,11 @@
 #include "ui_login.h"
 #include <thread>
 
-User::User(std::string name, QListWidget *chat, bool isOnline)
+User::User(std::string name, QListWidget *chat, QListWidgetItem* item, bool isOnline)
 {
     this->name = name;
     this->chat = chat;
+    this->item = item;
     this->isOnline = isOnline;
 }
 

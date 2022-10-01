@@ -106,14 +106,13 @@ bool Client::Recv(bool *isExit)
             Chat* chat = (Chat*)wind_chat;
             chat->set_users_list(splited[1]);
             message.erase(0, message.find_first_of('}') + 1);
+        } else if (splited[0] == "{#}") {
+            Chat* chat = (Chat*)wind_chat;
+            chat->client_disconnected(splited[1]);
         }
         if (wind_chat != nullptr) {
             Chat* chat = (Chat*)wind_chat;
             chat->set_list_message(message);
-        }
-        int index = message.find('#');
-        if (index >= 0) {
-            exit(0);
         }
     }
 }
@@ -154,6 +153,7 @@ std::vector<std::string> Client::split(std::string msg, char split_char)
 void Client::disconnect()
 {
     std::string message = "{#} " + name;
+    wind_chat = nullptr;
     char buffer[buf_s];
     strcpy(buffer, message.c_str());
     send(serverSocket, buffer, buf_s, 0);

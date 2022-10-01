@@ -18,10 +18,11 @@ QT_END_NAMESPACE
 
 struct User
 {
-    User(std::string name, QListWidget *chat, bool isOnline);
+    User(std::string name, QListWidget *chat, QListWidgetItem *item, bool isOnline);
 
     std::string name;
     QListWidget* chat = nullptr;
+    QListWidgetItem *item = nullptr;
     bool isOnline;
 };
 
