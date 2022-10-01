@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMessageBox>
 #include <QString>
+#include <QCloseEvent>
 #include "../engine/client.hpp"
 
 namespace Ui {
@@ -28,6 +29,8 @@ private slots:
     void on_input_name_textEdited(const QString &arg1);
 
     void on_input_conf_textEdited(const QString &arg1);
+
+    void closeEvent(QCloseEvent *event);
 
 private:
     QWidget *parent;

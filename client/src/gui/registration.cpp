@@ -74,6 +74,9 @@ Registration::~Registration()
 
 void Registration::on_btn_reg_clicked()
 {
+    if (!client->connect("127.0.0.1", 1234)) {
+        QMessageBox::critical(this, "Connect Error", "Dont connected, try again");
+    }
     std::string user_login = ui->input_name->text().toStdString();
     if(!(login_check(user_login))) {
         return;
@@ -92,6 +95,7 @@ void Registration::on_btn_reg_clicked()
 	    ui->label_3->setStyleSheet("QLabel { color : red; }");
        // QMessageBox::warning(this, "Registration failed!", "User with this login is exist");
     }
+    client->disconnect();
 }
 
 
@@ -119,4 +123,18 @@ void Registration::on_input_conf_textEdited(const QString &arg1)
                return;
        }
 
+}
+
+void Registration::closeEvent(QCloseEvent *event)
+{
+    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "Close window",
+                                                                tr("Do you want to abort this operation?\n"),
+                                                                QMessageBox::No | QMessageBox::Yes,
+                                                                QMessageBox::Yes);
+    if(resBtn != QMessageBox::Yes) {
+        event->ignore();
+    } else {
+        client->disconnect();
+        event->accept();
+    }
 }

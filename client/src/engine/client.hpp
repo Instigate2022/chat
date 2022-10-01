@@ -12,6 +12,7 @@ public:
     std::string name;
     int serverSocket;
     void *wind_chat = nullptr;
+    std::string file_name = "";
 
 public:
     bool connect(std::string IP, int Port);
@@ -20,6 +21,8 @@ public:
     bool registration(std::string login, std::string password);
     //bool Send(bool *isExit);
     void Send(std::string message, std::string to_whom);
+    void sendFile(std::string to_whom);
+    bool RecvFile();
     bool Recv(bool *isExit);
     void set_chat_window(void *window);
     void disconnect();

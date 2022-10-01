@@ -22,7 +22,7 @@ static const uint qt_meta_data_Registration[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -34,6 +34,7 @@ static const uint qt_meta_data_Registration[] = {
       35,   13,   13,   13, 0x08,
       64,   59,   13,   13, 0x08,
       98,   59,   13,   13, 0x08,
+     138,  132,   13,   13, 0x08,
 
        0        // eod
 };
@@ -43,6 +44,7 @@ static const char qt_meta_stringdata_Registration[] = {
     "on_btn_cancel_clicked()\0arg1\0"
     "on_input_name_textEdited(QString)\0"
     "on_input_conf_textEdited(QString)\0"
+    "event\0closeEvent(QCloseEvent*)\0"
 };
 
 void Registration::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -55,6 +57,7 @@ void Registration::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 1: _t->on_btn_cancel_clicked(); break;
         case 2: _t->on_input_name_textEdited((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 3: _t->on_input_conf_textEdited((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 4: _t->closeEvent((*reinterpret_cast< QCloseEvent*(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -92,9 +95,9 @@ int Registration::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }

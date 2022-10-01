@@ -158,3 +158,66 @@ void Client::disconnect()
     strcpy(buffer, message.c_str());
     send(serverSocket, buffer, buf_s, 0);
 }
+
+void Client::sendFile(std::string to_whom)
+{
+    if(file_name == "") {
+        return;
+    }
+    FILE* file;
+    int words = 0;
+    char c;
+    char buffer[buf_s];
+    char name[file_name.size()];
+    strcpy(name, file_name.c_str());
+    std::cout << "File name: " << name << '\n';
+    file = fopen(name, "r");
+
+    while((c = getc(file)) != EOF)
+    {
+        fscanf(file,"%s",buffer);
+        if(isspace(c) || c == '\t')
+            words++;
+    }
+
+    send(serverSocket,&words,sizeof(int),0);
+    rewind(file);
+    char ch;
+    while(ch != EOF)
+    {
+        fscanf(file, "%s", buffer);
+        send(serverSocket,buffer,buf_s,0);
+        ch = fgetc(file);
+        std::cout << "Char ch: " << ch << '\n';
+    }
+
+
+    /*
+    QFile file(file_name);
+    if(!(file.open(QIODevice::Append)))
+    {
+        qDebug("File cannot be opened.");
+        exit(0);
+    }
+    QByteArray read = read(client->bytesAvailable());
+    file.write(read);
+    file.close();
+
+    */
+}
+
+bool Client::RecvFile()
+{
+    FILE* fp;
+    char buffer[buf_s];
+    int ch = 0;
+    fp = fopen("recievd.txt" ,"a");
+    int words;
+    recv(serverSocket, &words, sizeof(int), 0);
+    while(ch != words)
+    {
+        recv(serverSocket, buffer, buf_s,0);
+        fprintf(fp,"%s", buffer);
+    }
+    file_name = "";
+}
