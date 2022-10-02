@@ -11,10 +11,12 @@ class Client{
 public:
     std::string name;
     int serverSocket;
+    std::string mac_addres;
     void *wind_chat = nullptr;
     std::string file_link = "";
 
 public:
+    void setMyMacAddres();
     bool connect(std::string IP, int Port);
     bool run();
     bool login(std::string login, std::string password);

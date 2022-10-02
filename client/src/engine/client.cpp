@@ -5,11 +5,22 @@
 #include <arpa/inet.h>
 #include <thread>
 #include <string.h>
+#include <fstream>
 
 #include "client.hpp"
 #include "../gui/chat.h"
 
+void Client::setMyMacAddres()
+{
+    std::string bash_command = "ifconfig -a | grep ether | gawk '{print $2}' > mac_addres.txt";
+    system(bash_command.c_str());
+    std::ifstream info("mac_addres.txt");
+    info >> mac_addres;
+    std::cout << "Mac Addres: " << mac_addres << '\n';
+}
+
 bool Client::connect(std::string IP, int Port) {
+    setMyMacAddres();
     struct sockaddr_in server_addres;
     serverSocket = socket(AF_INET,SOCK_STREAM,0);
     server_addres.sin_port = htons(Port);
