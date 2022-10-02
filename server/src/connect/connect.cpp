@@ -205,6 +205,8 @@ bool Recv(int client, bool *isExit)
             if (splited[0] == "{?}") {
                 ClientLogin(client, splited[1], splited[2]);
                 continue;
+            } else if (splited[0] == "{FILE}") {
+                recvFile(client, splited[1], splited[2]);
             }
             message.erase(0, message.find_first_of(" ") + 1);
             Client* user = clients_list.getClientByName(splited[0]);
@@ -229,6 +231,27 @@ void clientDisconnected(int client)
         Client* user = clients_list.getClientByIndex(i);
         send(user->socket, message.c_str(), message.size(), 0);
     }
+}
+
+void recvFile(int client, std::string to_whom, std::string file_name)
+{
+    std::cout << "To: " << to_whom << '\n';
+    std::cout << "File name: " << file_name << '\n';
+    std::string msg = "Ready Read\n";
+    send(client, msg.c_str(), msg.size(), 0);
+    std::string file_buffer = "";
+    char buffer[buf_s];
+    memset(buffer, 0, buf_s);
+    while (std::string(buffer) != "{END OF FILE}") {
+        memset(buffer, 0, buf_s);
+        recv(client, buffer, buf_s, 0);
+        if (std::string(buffer) == "{END OF FILE}") break;
+        file_buffer += buffer;
+    }
+    std::cout << "End signal: " << buffer << '\n';
+    std::cout << "File buffer =>\n" << file_buffer << '\n';
+    std::ofstream file(file_name.c_str());
+    file << file_buffer;
 }
 
 vector<string> split(string a, char b)

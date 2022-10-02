@@ -7,6 +7,7 @@
 #include <QList>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QFileDialog>
 #include "../engine/client.hpp"
 
 

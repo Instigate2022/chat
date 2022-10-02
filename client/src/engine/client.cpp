@@ -28,6 +28,11 @@ bool Client::run()
     if (serverSocket < 0) {
         return false;
     }
+    char buffer[buf_s];
+    int chgitem = gethostname(buffer, buf_s);
+    std::cout << "Host ID = " << gethostid() << '\n';
+    std::cout << "Chgitem = " << chgitem << '\n';
+    std::cout << "Hostname = " << buffer << '\n';
     bool isExit = false;
 //    std::thread thSend([&](){isExit = Send(&isExit);});
     std::cout << "Create Thread\n";
@@ -161,21 +166,28 @@ void Client::disconnect()
 
 void Client::sendFile(std::string to_whom)
 {
-    if(file_name == "") {
+    if(file_link == "") {
         return;
     }
+    std::string file_name = file_link;
+    file_name.erase(0, file_name.find_last_of("/") + 1);
+    std::string message = "{FILE} " + to_whom + " " + file_name;
+    send(serverSocket, message.c_str(), message.size(), 0);
+
+    char buffer[buf_s];
+    recv(serverSocket, buffer, buf_s, 0);
+    std::cout << "Server ready recv file: " << buffer << '\n';
+    memset(buffer, 0, buf_s);
+
     FILE* file;
     int words = 0;
     char c;
-    char buffer[buf_s];
-    char name[file_name.size()];
-    strcpy(name, file_name.c_str());
-    std::cout << "File name: " << name << '\n';
-    file = fopen(name, "r");
-
+    std::cout << "File name: " << file_name << '\n';
+    file = fopen(file_link.c_str(), "r");
     while((c = getc(file)) != EOF)
     {
         fscanf(file,"%s",buffer);
+        std::cout << "buffer: " << buffer << '\n';
         if(isspace(c) || c == '\t')
             words++;
     }
@@ -186,11 +198,14 @@ void Client::sendFile(std::string to_whom)
     while(ch != EOF)
     {
         fscanf(file, "%s", buffer);
-        send(serverSocket,buffer,buf_s,0);
         ch = fgetc(file);
-        std::cout << "Char ch: " << ch << '\n';
+        if (std::string(buffer).size() == 0) continue;
+        std::string(buffer) += ch;
+        std::cout << "IN 2 while: " << buffer << '\n';
+        send(serverSocket,buffer,buf_s,0);
     }
-
+    std::string end_signal = "{END OF FILE}";
+    send(serverSocket, end_signal.c_str(), end_signal.size(), 0);
 
     /*
     QFile file(file_name);
@@ -219,5 +234,5 @@ bool Client::RecvFile()
         recv(serverSocket, buffer, buf_s,0);
         fprintf(fp,"%s", buffer);
     }
-    file_name = "";
+    file_link = "";
 }

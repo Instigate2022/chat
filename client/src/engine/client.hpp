@@ -12,7 +12,7 @@ public:
     std::string name;
     int serverSocket;
     void *wind_chat = nullptr;
-    std::string file_name = "";
+    std::string file_link = "";
 
 public:
     bool connect(std::string IP, int Port);

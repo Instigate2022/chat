@@ -24,6 +24,7 @@ using namespace std;
 void ClientConnect(int client);
 bool Send(int client, bool *isExit);
 bool Recv(int client, bool *isExit);
+void recvFile(int client, std::string to_whom, std::string file_name);
 vector<string> split(string a, char b);
 
 bool ClientLogin(int client, std::string login, std::string pass);
