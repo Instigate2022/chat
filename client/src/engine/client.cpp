@@ -203,7 +203,7 @@ void Client::sendFile(std::string to_whom)
             words++;
     }
 
-    send(serverSocket,&words,sizeof(int),0);
+    //send(serverSocket,&words,sizeof(int),0);
     rewind(file);
     char ch;
     while(ch != EOF)
