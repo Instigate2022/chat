@@ -30,7 +30,7 @@ Chat::Chat(void *parent, Client *client) :
     QListWidgetItem *server_item = new QListWidgetItem("Server");
     ui->list_users->addItem(server_item);
     users.push_back(new User("Server", new QListWidget(), server_item, true));
-    connect(ui->input_msg, SIGNAL(returnPressed), this, SLOT(on_btn_send_clicked));
+    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
 }
 
 Chat::~Chat()

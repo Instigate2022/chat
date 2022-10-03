@@ -1,0 +1,1 @@
+#include"mainwindow.h"#include<QApplication>intmain(intargc,char*argv[]){QApplicationa(argc,argv);MainWindoww;w.show();returna.exec();}}

@@ -74,6 +74,7 @@ Registration::~Registration()
 
 void Registration::on_btn_reg_clicked()
 {
+	/// todo think about moving to main
     if (!client->connect("127.0.0.1", 1234)) {
         QMessageBox::critical(this, "Connect Error", "Dont connected, try again");
     }

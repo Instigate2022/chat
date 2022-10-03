@@ -38,6 +38,8 @@ void Login::on_btn_login_clicked()
     message += " " + ui->input_pass->text().toStdString();
     std::cout << message << '\n';
     int spaces = 0;
+    //todo optimize with libraray functions
+    // cleanup, redundant part of algorithm
     for (int i = 0; i < message.size(); i++) {
         if (message[i] == ' ') {
             spaces += 1;
@@ -50,6 +52,8 @@ void Login::on_btn_login_clicked()
         return;
     }
     if (client->login(ui->input_login->text().toStdString(), ui->input_pass->text().toStdString())) {
+
+	    ///todo move thread to run function
         std::thread th1([&](){client->run();});
         th1.detach();
         wind_chat = new Chat(this, client);
@@ -71,6 +75,9 @@ void Login::on_btn_reg_clicked()
     wind_reg->move(x, y);
     wind_reg->show();
     this->hide();
+    //widgets related functionality should be added on construction
+    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::btn_login);
+
 }
 
 void Login::closeEvent(QCloseEvent *event)
