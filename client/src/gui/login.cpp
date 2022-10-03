@@ -76,8 +76,6 @@ void Login::on_btn_reg_clicked()
     wind_reg->show();
     this->hide();
     //widgets related functionality should be added on construction
-    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::btn_login);
-
 }
 
 void Login::closeEvent(QCloseEvent *event)
