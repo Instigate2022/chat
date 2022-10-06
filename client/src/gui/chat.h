@@ -37,10 +37,13 @@ private slots:
 
     void on_list_users_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
+    void on_show_users_clicked();
+
 private:
     Ui::Chat *ui;
     void *login_wind;
     Client *client;
+
 };
 
 #endif // CHAT_H

@@ -7,6 +7,7 @@
 #include <QDesktopWidget>
 #include <QListWidget>
 
+
 #include "chat.h"
 #include "registration.h"
 #include "../engine/client.hpp"

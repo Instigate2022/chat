@@ -26,12 +26,20 @@ Chat::Chat(void *parent, Client *client) :
     int y = (screenGeometry.height() - this->height()) / 2;
     this->move(x, y);
     QLabel *myLabel = new QLabel(this);
+
     myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg"));
     myLabel->show();
     login_wind = parent;
     ui->setupUi(this);
     this->client = client;
+<<<<<<< HEAD
 //    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
+=======
+    QListWidgetItem *server_item = new QListWidgetItem("Server");
+    ui->list_users->addItem(server_item);
+    users.push_back(new User("Server", new QListWidget(), server_item, true));
+    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
+>>>>>>> 0b3e56989e11cc62b91517360ef305d961e2a16a
 }
 
 Chat::~Chat()
@@ -74,6 +82,7 @@ void Chat::on_btn_file_clicked()
 
 void Chat::on_btn_send_clicked()
 {
+
     std::string message = ui->input_msg->text().toStdString();
     int size = ui->list_users->count();
     if (size <= 0) {
@@ -165,6 +174,7 @@ void Chat::on_list_users_currentItemChanged(QListWidgetItem *current, QListWidge
 {
     std::cout << "Current item changed\n";
     std::string name = current->text().toStdString();
+    ui->label_name->setText(current->text());
     User *user = getUser(name);
     if (user == nullptr) return;
     if (user->chat == nullptr) {
@@ -187,5 +197,17 @@ void Chat::client_disconnected(std::string name)
     User* user = getUser(name);
     user->isOnline = false;
     user->item->setBackgroundColor(Qt::red);
+}
+
+
+void Chat::on_show_users_clicked()
+{
+    if (ui->list_users->isHidden()) {
+        ui->list_users->show();
+        ui->show_users->setText("<");
+    } else {
+        ui->show_users->setText(">");
+        ui->list_users->hide();
+    }
 }
 

@@ -1,6 +1,7 @@
 ﻿#include "registration.h"
 #include "ui_registration.h"
 
+
 Registration::Registration(QWidget *parent, Client *client) :
     QWidget(),
     ui(new Ui::Registration)
@@ -15,22 +16,29 @@ Registration::Registration(QWidget *parent, Client *client) :
     this->client = client;
     this->parent = parent;
     ui->setupUi(this);
+    connect(ui->input_name,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
+    connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
+    connect(ui->input_conf,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
 }
 
 bool Registration::login_check(std::string user_login)
 {
-    if(!((user_login[0] >= 65 && user_login[0] <= 90) ||
-       (user_login[0] >= 97 && user_login[0] <= 122))) {
-        ui->label_3->setText("Smth is wrong, Login can not have spaces and first letter should be a-z or A-Z");
+    if(!((user_login[0] >= 'a' && user_login[0] <= 'z') ||
+       (user_login[0] >= 'A' && user_login[0] <= 'Z'))) {
+        ui->label_3->setText("First letter should be a-z or A-Z");
         ui->label_3->setStyleSheet("QLabel { color : red; }");
         return false;
     }
+
     ui->label_3->setText("");
 
-    for (unsigned int i = 0; i < user_login.size(); ++i) {
-        if(user_login[i] == ' ') {
-            QMessageBox::warning(this, "Incorrect Login Name!", "Login can not have spaces.");
-            return false;
+    for (unsigned int i = 1; i < user_login.size(); ++i) {
+        if(!((user_login[i] == '.' || user_login[i] == '_' || user_login[i] == '-') ||
+          (user_login[i] >= 'a' && user_login[i] <= 'z') ||
+          (user_login[i] >= 'A' && user_login[i] <= 'Z'))) {
+           ui->label_3->setText("Need to use uppercase, lowercase or symbols(-, _, .)");
+           ui->label_3->setStyleSheet("QLabel { color : red; }");
+           return false;
         }
     }
     return true;
@@ -38,32 +46,40 @@ bool Registration::login_check(std::string user_login)
 
 bool Registration::pass_check(std::string pass, std::string check)
 {
-    int uppercase = 0;
-    int lowercase = 0;
-    int number = 0;
-    unsigned int i;
+    bool uppercase = false;
+    bool lowercase = false;
+    bool number = false;
+    bool symbols = false;
+    std::string symbols_list = "!@#$%^&*_-+=|/;.,:";
+
     if(pass != check) {
         ui->label_5->setText("Password confirmation failed. Fields do not match.");
         ui->label_5->setStyleSheet("QLabel { color : red; }");
         return false;
     }
-    for(i = 0; i < pass.size(); i++) {
-        if(pass[i] >=65 && pass[i] <= 90) {
-            ++uppercase;
+    for(size_t i = 0; i < pass.size(); i++) {
+        if(pass[i] >='A' && pass[i] <= 'Z') {
+            uppercase = true;
         }
-        if (pass[i] >= 97 && pass[i] <= 122) {
-            ++lowercase;
+        if (pass[i] >= 'a' && pass[i] <= 'z') {
+            lowercase = true;
         }
-        if (pass[i] >= 48 && pass[i] <= 57) {
-            ++number;
+        if (pass[i] >= '0' && pass[i] <= '9') {
+            number = true;
+        }
+        for (size_t j = 0; j < symbols_list.size(); j++) {
+            if (symbols_list[j] == pass[i]) {
+                symbols = true;
+            }
         }
     }
-    if(i < 4) {
+
+    if(pass.size() < 4) {
         ui->label_4->setText("Password must contain at least 4 characters.");
         ui->label_4->setStyleSheet("QLabel { color : red; }");
         return false;
     }
-    if(uppercase == 0 || lowercase == 0 || number == 0) {
+    if(uppercase == 0 || lowercase == 0 || number == 0 || symbols == 0) {
         ui->label_4->setText("Password must contain at least one lowercase, uppercase and number.");
         ui->label_4->setStyleSheet("QLabel { color : red; }");
         return false;
@@ -78,6 +94,13 @@ Registration::~Registration()
 
 void Registration::on_btn_reg_clicked()
 {
+<<<<<<< HEAD
+=======
+	/// todo think about moving to main
+    if (!client->connect("127.0.0.1", 1233)) {
+        QMessageBox::critical(this, "Connect Error", "Dont connected, try again");
+    }
+>>>>>>> 0b3e56989e11cc62b91517360ef305d961e2a16a
     std::string user_login = ui->input_name->text().toStdString();
     std::string pass = ui->input_pass->text().toStdString();
     std::string check = ui->input_conf->text().toStdString();
@@ -96,11 +119,10 @@ void Registration::on_btn_reg_clicked()
         this->hide();
         parent->show();
     } else {
-	    ui->label_3->setText("User with this login is exist");
+        //ui->label_3->setText("User with this login is exist");
 	    ui->label_3->setStyleSheet("QLabel { color : red; }");
     }
 }
-
 
 void Registration::on_btn_cancel_clicked()
 {
