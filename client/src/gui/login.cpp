@@ -19,6 +19,8 @@ Login::Login(QWidget *parent)
     myLabel->show();
     client = new Client();
     ui->setupUi(this);
+    connect(ui->input_login,  &QLineEdit::returnPressed, this, &Login::on_btn_login_clicked);
+    connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Login::on_btn_login_clicked);
 }
 
 Login::~Login()
@@ -26,10 +28,9 @@ Login::~Login()
     delete ui;
 }
 
-
 void Login::on_btn_login_clicked()
 {
-    if (!client->connect("127.0.0.1", 1234)) {
+    if (!client->connect("127.0.0.1", 1233)) {
         QMessageBox::critical(this, "Connect Error", "Dont connected, try again");
     }
     std::cout << "Start Login\n";
@@ -54,9 +55,14 @@ void Login::on_btn_login_clicked()
     if (client->login(ui->input_login->text().toStdString(), ui->input_pass->text().toStdString())) {
 
 	    ///todo move thread to run function
-        std::thread th1([&](){client->run();});
+	std::thread th1([&](){client->run();});
         th1.detach();
-        wind_chat = new Chat(this, client);
+	
+	wind_chat = new Chat(this, client);
+    	QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    	int x = (screenGeometry.width() - wind_chat->width()) / 2;
+    	int y = (screenGeometry.height() - wind_chat->height()) / 2;
+   	wind_chat->move(x, y);
         wind_chat->show();
         this->hide();
     } else {
@@ -64,7 +70,6 @@ void Login::on_btn_login_clicked()
     }
 }
 
-int spaces = 0;
 
 void Login::on_btn_reg_clicked()
 {

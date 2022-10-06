@@ -25,14 +25,60 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="show_users">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>30</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>15</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>&lt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QLabel" name="label_name">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>20</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -59,6 +105,7 @@
          <property name="font">
           <font>
            <pointsize>12</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -95,6 +142,7 @@
          <property name="font">
           <font>
            <pointsize>12</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -114,6 +162,7 @@
          <property name="font">
           <font>
            <pointsize>12</pointsize>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -127,6 +176,8 @@
     </layout>
    </item>
   </layout>
+  <zorder>show_users</zorder>
+  <zorder>list_users</zorder>
  </widget>
  <resources/>
  <connections/>
