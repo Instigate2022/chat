@@ -2,22 +2,20 @@
 
 struct Client
 {
-    string name;
-    string password;
+    std::string name;
     int socket;
     bool isOnline = true;
 
-    Client(string name, string password, int socket)
+    Client(std::string name, int socket)
     {
         this->name = name;
-        this->password = password;
         this->socket = socket;
     }
 };
 
 struct ClientsList
 {
-    vector<Client*> list;
+    std::vector<Client*> list;
 
     void addClient(Client* client) {
         list.push_back(client);
@@ -61,9 +59,9 @@ struct ClientsList
 
     void remove(Client* client)
     {
-        vector<Client*> new_list;
+        std::vector<Client*> new_list;
         for (int i = 0; i < list.size(); ++i) {
-            if (list[i] != client) {
+            if (list[i]->name != client->name) {
                 new_list.push_back(list[i]);
             }
         }
@@ -75,62 +73,67 @@ ClientsList clients_list;
 
 void ClientConnect(int client)
 {
-    bool LoggedIn = false;
-    while (!LoggedIn) {
-        char buffer[buf_s];
-        memset(&buffer, 0, buf_s);
-        recv(client, buffer, buf_s, 0);
-        string message = buffer;
-        cout << "New Message " << message << '\n';
-        int index = message.find("#");
-        if (index >= 0) {
-            return;
-        }
-        vector<string> splited = split(message, ' ');
-        for (int i = 0; i < splited.size(); i++) {
-            cout << i << " " << splited[i] << '\n';
-        }
-        if (splited[0] == "{?}") {
-            LoggedIn = ClientLogin(client, splited[1], splited[2]);
-        } else if (splited[0] == "{??}"){
-            Registration(client, splited[1], splited[2]);
-        }
-    }
-    cout << "Connected clients: " << clients_list.size() << '\n';
+    std::cout << "Client connected\n";
     bool isExit = false;
-    thread thSend([&](){isExit = Send(client, &isExit);});
-    thread thRecv([&](){isExit = Recv(client, &isExit);});
+    std::thread thSend([&](){isExit = Send(client, &isExit);});
+    std::thread thRecv([&](){isExit = Recv(client, &isExit);});
     thSend.join();
     thRecv.join();
 }
-
-bool ClientLogin(int client, std::string login, std::string pass)
+/*
+bool loginProcess(int client, bool *isExit)
 {
-    char buffer[buf_s];
-    memset(buffer, 0, buf_s);
-    std::ifstream user_file(login);
-    if (!user_file) {
-        strcpy(buffer, "Dont exist");
-        std::cout << buffer << '\n';
-        send(client, buffer, sizeof(buffer), 0);
+    std::cout << "Client connected\n";
+    bool LoggedIn = false;
+    std::vector<std::string> list;
+    while(!LoggedIn) {
+        char buffer[buf_s];
+        memset(buffer, 0 ,buf_s);
+        recv(client, buffer, buf_s, 0);
+        list = split(buffer, ' ');
+        if (list[0] == "{?}") {
+            LoggedIn = ClientLogin(client, list[1], list[2]);
+            continue;
+        }
+        if (list[0] == "{??}") {
+            Registration(client, list[1], list[2]);
+            continue;
+        }
+    }
+    setClientsList(client, list[1], list[2]);
+    bool logOut = false;
+    std::thread thSend([&](){logOut = Send(client, isExit, &logOut);});
+    std::thread thRecv([&](){logOut = Recv(client, isExit, &logOut);});
+    thSend.detach();
+    thRecv.join();
+    std::cout << "END LOGIN PROCESS\n";
+    return *isExit;
+}
+*/
+void setClientsList(int socket, std::string login)
+{
+    Client *user = new Client(login, socket);
+    clients_list.addClient(user);
+    std::cout << "Client added successful\n";
+}
+
+bool ClientLogin(int client, std::string name, std::string pass)
+{
+    std::ifstream file(name);
+    if(!file.is_open()) {
+        std::string message = "{?} Cancel";
+        send(client, message.c_str(), message.size(), 0);
         return false;
     }
-    strcpy(buffer, "Ok");
-    send(client, buffer, buf_s, 0);
-    user_file.close();
-
-    for (int i = 0; i < clients_list.size(); ++i) {
-        memset(buffer, 0, buf_s);
-        std::string message = "{!} " + login + " Connected";
-        strcpy(buffer, message.c_str());
-        Client* user = clients_list.getClientByIndex(i);
-        std::cout << "Send to: " << user->name << " By Socket: " << user->socket << '\n';
-        send(user->socket, buffer, buf_s, 0);
+    std::string data_pass;
+    file >> data_pass;
+    if (pass != data_pass) {
+        std::string message = "{?} Wrong";
+        send(client, message.c_str(), message.size(), 0);
+        return false;
     }
-
-    Client* user = new Client(login, pass, client);
-    clients_list.addClient(user);
-
+    std::string message = "{?} Ok";
+    send(client, message.c_str(), message.size(), 0);
     return true;
 }
 
@@ -155,6 +158,7 @@ void Registration(int client, std::string login, std::string pass)
 
 void addConnectedClients(int client)
 {
+
     for(int i = 0; i < clients_list.size() - 1; ++i) {
         char buffer[buf_s];
         memset(buffer, 0, buf_s);
@@ -163,6 +167,14 @@ void addConnectedClients(int client)
         std::cout << "Message for client: " << messageForClient << '\n';
         strcpy(buffer, messageForClient.c_str());
         send(client, buffer, buf_s, 0);
+        recv(client, buffer, buf_s, 0);
+        std::cout << "Buffer: " << buffer << '\n';
+    }
+    Client* user = clients_list.getClientBySocket(client);
+    for (int i = 0; i < clients_list.size() - 1; ++i) {
+        std::string message = "{!} " + user->name + " Connected\n";
+        Client* send_to = clients_list.getClientByIndex(i);
+        send(send_to->socket, message.c_str(), message.size(), 0);
     }
 }
 
@@ -171,63 +183,97 @@ bool Send(int client, bool *isExit)
     while(!*isExit) {
         char buffer[buf_s];
         memset(&buffer, 0, sizeof(buffer));
-        cin.getline(buffer, buf_s);
+        std::cin.getline(buffer, buf_s);
         std::string message = "Server: " + std::string(buffer);
         memset(&buffer, 0, sizeof(buffer));
         strcpy(buffer, message.c_str());
         send(client, buffer, buf_s, 0);
-        int index = std::string(buffer).find("#");
-        if (index >= 0) {
-            std::cout << "Client: " << client << " Disconnected\n";
-            return true;
-        }
     }
 }
 
 bool Recv(int client, bool *isExit)
 {
-    addConnectedClients(client);
-    while(!*isExit) {
+    while (!*isExit)
+    {
+        std::cout << "Start While\n";
         char buffer[buf_s];
-        memset(&buffer, 0, sizeof(buffer));
+        memset(buffer, 0, buf_s);
         recv(client, buffer, buf_s, 0);
-        std::string message = buffer;
-        std::cout << "Message: " << message << '\n';
-        vector<string> splited = split(message, ' ');
-        if (message.size() == 0) {
-            *isExit = true;
-        }
-        if (splited[0] == "{#}") {
-            std::cout << "Client: " << client << " Disconnected\n";
-            *isExit = true;
-        }
-        if (splited.size() > 2) {
-            if (splited[0] == "{?}") {
-                ClientLogin(client, splited[1], splited[2]);
-                continue;
-            } else if (splited[0] == "{FILE}") {
-                recvFile(client, splited[1], splited[2]);
-            }
-            message.erase(0, message.find_first_of(" ") + 1);
-            Client* user = clients_list.getClientByName(splited[0]);
-            if (user != nullptr) {
-                send(user->socket, message.c_str(), message.size(), 0);
-            }
-        }
-        if (*isExit) {
+        std::cout << "New Message: " << buffer << '\n';
+        if (std::string(buffer).size() == 0) {
+            std::cout << "Client Crashed\n";
             clientDisconnected(client);
+            return true;
         }
+        std::vector<std::string> list = split(std::string(buffer), ' ');
+        
+        print_vector(list);
+
+        if (list[0] == "{!!}") {
+            setClientsList(client, list[1]);
+            addConnectedClients(client);
+        }
+        if (list[0] == "{#}") {
+            clientLogOut(list[1]);
+            continue;
+        }
+        if (list[0] == "{?}") {
+            ClientLogin(client, list[1], list[2]);
+            continue;
+        }
+        if (list[0] == "{??}") {
+            Registration(client, list[1], list[2]);
+            continue;
+        }
+        if (list[0] == "{SENDTO}") {
+            SendTo(list[1], std::string(buffer));
+        }
+    }
+    
+}
+
+void SendTo(std::string to_whom, std::string message)
+{
+    int index = message.find(to_whom);
+    std::cout << "Index: " << index << '\n';
+    message.erase(0, index + to_whom.size() + 1);
+    std::cout << "Message before erase: " << message << '\n';
+    Client* user = clients_list.getClientByName(to_whom);
+    if (user == nullptr) {
+        std::cout << "User Not Found\n";
+        return;
+    }
+    send(user->socket, message.c_str(), message.size(), 0);
+}
+
+void clientLogOut(std::string name)
+{
+    Client *user = clients_list.getClientByName(name);
+    if (user == nullptr) {
+        return;
+    }
+    clients_list.remove(user);
+    std::cout << "Remove: " << user->name << " by socket: " << user->socket << '\n';
+    std::string message = "{#} " + user->name + " Disconnected\n";
+    for (int i = 0; i < clients_list.size(); ++i) {
+        char buffer[buf_s];
+        Client* send_to = clients_list.getClientByIndex(i);
+        send(send_to->socket, message.c_str(), message.size(), 0);
     }
 }
 
 void clientDisconnected(int client)
 {
     Client* user = clients_list.getClientBySocket(client);
+    if (user == nullptr) {
+        return;
+    }
     std::cout << "Remove user: " << user->name << '\n';
     clients_list.remove(user);
     std::cout << "Connected Clients: " << clients_list.size() << '\n';
     std::string message = "{#} " + user->name + " Disconnected\n";
     for (int i = 0; i < clients_list.size(); ++i) {
+        char buffer[buf_s];
         Client* user = clients_list.getClientByIndex(i);
         send(user->socket, message.c_str(), message.size(), 0);
     }
@@ -254,10 +300,10 @@ void recvFile(int client, std::string to_whom, std::string file_name)
     file << file_buffer;
 }
 
-vector<string> split(string a, char b)
+std::vector<std::string> split(std::string a, char b)
 {
-    vector<string> matr;
-    string popox = "";
+    std::vector<std::string> matr;
+    std::string popox = "";
     for(int i = 0; i < a.size(); i++) {
         if (a[i] != b) {
             popox += a[i];
@@ -269,4 +315,11 @@ vector<string> split(string a, char b)
     }
     matr.push_back(popox);
     return matr;
+}
+
+void print_vector(std::vector<std::string> list)
+{
+    for (int i = 0; i < list.size(); ++i) {
+        std::cout << i << " " << list[i] << ".\n";
+    }
 }

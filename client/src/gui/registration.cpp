@@ -5,6 +5,10 @@ Registration::Registration(QWidget *parent, Client *client) :
     QWidget(),
     ui(new Ui::Registration)
 {
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    int x = (screenGeometry.width() - this->width()) / 2;
+    int y = (screenGeometry.height() - this->height()) / 2;
+    this->move(x, y);
     QLabel *myLabel = new QLabel(this);
     myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg"));
     myLabel->show();
@@ -74,16 +78,16 @@ Registration::~Registration()
 
 void Registration::on_btn_reg_clicked()
 {
-	/// todo think about moving to main
-    if (!client->connect("127.0.0.1", 1234)) {
-        QMessageBox::critical(this, "Connect Error", "Dont connected, try again");
-    }
     std::string user_login = ui->input_name->text().toStdString();
+    std::string pass = ui->input_pass->text().toStdString();
+    std::string check = ui->input_conf->text().toStdString();
     if(!(login_check(user_login))) {
         return;
     }
+    if(!(pass_check(pass, check))) {
+        return;
+    }
     if(ui->input_pass->text() != ui->input_conf->text()) {
-       // QMessageBox::warning(this, "Registration failed!", "Password is not equal Confirm");
         ui->label_5->setText("Not Matching");
 	    ui->label_5->setStyleSheet("QLabel { color : red; }");
         return;
@@ -94,9 +98,7 @@ void Registration::on_btn_reg_clicked()
     } else {
 	    ui->label_3->setText("User with this login is exist");
 	    ui->label_3->setStyleSheet("QLabel { color : red; }");
-       // QMessageBox::warning(this, "Registration failed!", "User with this login is exist");
     }
-    client->disconnect();
 }
 
 
@@ -121,9 +123,8 @@ void Registration::on_input_conf_textEdited(const QString &arg1)
     ui->label_4->setText("");
     ui->label_5->setText("");
     if(!(pass_check(ui->input_pass->text().toStdString(), ui->input_conf->text().toStdString()))) {
-               return;
-       }
-
+        return;
+    }
 }
 
 void Registration::closeEvent(QCloseEvent *event)
@@ -135,7 +136,7 @@ void Registration::closeEvent(QCloseEvent *event)
     if(resBtn != QMessageBox::Yes) {
         event->ignore();
     } else {
-        client->disconnect();
+        //client->disconnect("{##}");
         event->accept();
     }
 }

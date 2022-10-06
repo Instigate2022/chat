@@ -4,31 +4,38 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <thread>
 
 #define buf_s 1024
 
+
+std::vector<std::string> split(std::string str, char ch);
+
 class Client{
-public:
-    std::string name;
+private:
     int serverSocket;
-    std::string mac_addres;
-    void *wind_chat = nullptr;
-    std::string file_link = "";
+    std::string name;
+    std::string pass;
+    void* wind_login;
+    void* wind_chat;
+    bool LoggedIn = false;
+    bool isExit;
+    std::thread thRecv;
 
 public:
-    void setMyMacAddres();
-    bool connect(std::string IP, int Port);
-    bool run();
-    bool login(std::string login, std::string password);
-    bool registration(std::string login, std::string password);
-    //bool Send(bool *isExit);
+    bool Connect(std::string ip, int port);
+    void run();
+
+    std::string login(std::string login, std::string pass);
+    void check_login(std::string reply);
+    void set_chat_window(void* wind_chat);
+    void add_in_users_list(std::string name);
+    bool registration(std::string login, std::string pass);
+
     void Send(std::string message, std::string to_whom);
-    void sendFile(std::string to_whom);
-    bool RecvFile();
-    bool Recv(bool *isExit);
-    void set_chat_window(void *window);
-    void disconnect();
-    std::vector<std::string> split(std::string msg, char split_char);
+    bool Recv();
+    void other_message(std::string message);
+    void logOut();
 };
 
 #endif

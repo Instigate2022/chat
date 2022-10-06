@@ -11,8 +11,11 @@ int main()
     serv_addres.sin_family = AF_INET;
     serv_addres.sin_addr.s_addr = htons(INADDR_ANY);
 
-    bind(server, (struct sockaddr*)&serv_addres,sizeof(serv_addres));
-    cout << "stacvec bind anel " << endl;
+    if (bind(server, (struct sockaddr*)&serv_addres,sizeof(serv_addres)) < 0) {
+        std::cout << "Bind Error\n";
+        return 1;
+    }
+    std::cout << "stacvec bind anel " << std::endl;
 
     size = sizeof(serv_addres);
 
@@ -21,10 +24,9 @@ int main()
     while (true)
     {
         client = accept(server , (struct sockaddr *)&serv_addres, &size);
-        thread th1(ClientConnect, client);
+        std::thread th1(ClientConnect, client);
         th1.detach();
         /// TBD collect in a map
-        std::cout << "client connected" << client << std::endl;
+        std::cout << "client connected " << client << std::endl;
     }
 }
-

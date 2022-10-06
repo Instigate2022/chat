@@ -1,15 +1,15 @@
 #include "src/gui/login.h"
+#include "client.hpp"
+#define IP "127.0.0.1"
+#define PORT 1236
 
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
+    Client *client = new Client();
+    bool isConnected = client->Connect(IP, PORT);
     QApplication a(argc, argv);
-    Login w;
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    int x = (screenGeometry.width() - w.width()) / 2;
-    int y = (screenGeometry.height() - w.height()) / 2;
-    w.move(x, y);
-    w.show();
+    Login w(client, isConnected);
     return a.exec();
 }

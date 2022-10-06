@@ -22,7 +22,7 @@ class Chat : public QWidget
 public:
     explicit Chat(void *parent, Client *client);
     ~Chat();
-    void set_list_message(std::string msg);
+    void set_list_message(std::string by_user, std::string msg);
     void set_users_list(std::string name);
     void client_disconnected(std::string name);
 

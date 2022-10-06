@@ -1,6 +1,5 @@
 #include "login.h"
 #include "ui_login.h"
-#include <thread>
 
 User::User(std::string name, QListWidget *chat, QListWidgetItem* item, bool isOnline)
 {
@@ -10,15 +9,27 @@ User::User(std::string name, QListWidget *chat, QListWidgetItem* item, bool isOn
     this->isOnline = isOnline;
 }
 
-Login::Login(QWidget *parent)
-    : QWidget(parent)
+Login::Login(Client* client, bool isConnected)
+    : QWidget()
       , ui(new Ui::Login)
 {
+    if(!isConnected) {
+        QMessageBox::critical(this, "Connect Error", "Don`t connected");
+        exit(1);
+    }
+    wind_reg = new Registration(this, client);
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    int x = (screenGeometry.width() - this->width()) / 2;
+    int y = (screenGeometry.height() - this->height()) / 2;
+    this->move(x, y);
     QLabel *myLabel = new QLabel(this);
     myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg"));
     myLabel->show();
-    client = new Client();
     ui->setupUi(this);
+    this->client = client;
+    this->show();
+    ui->err_log->setStyleSheet("QLabel { color : red; }");
+    ui->err_pass->setStyleSheet("QLabel { color : red; }");
 }
 
 Login::~Login()
@@ -26,41 +37,32 @@ Login::~Login()
     delete ui;
 }
 
+void Login::run_chat()
+{
+    wind_chat = new Chat(this, client);
+    wind_chat->show();
+    client->set_chat_window(wind_chat);
+    this->hide();
+    client->run();
+}
 
 void Login::on_btn_login_clicked()
 {
-    if (!client->connect("127.0.0.1", 1234)) {
-        QMessageBox::critical(this, "Connect Error", "Dont connected, try again");
-    }
+    ui->err_pass->clear();
+    ui->err_log->clear();
     std::cout << "Start Login\n";
-    std::string message = "{?} ";
-    message += ui->input_login->text().toStdString();
-    message += " " + ui->input_pass->text().toStdString();
-    std::cout << message << '\n';
-    int spaces = 0;
-    //todo optimize with libraray functions
-    // cleanup, redundant part of algorithm
-    for (int i = 0; i < message.size(); i++) {
-        if (message[i] == ' ') {
-            spaces += 1;
-        }
-    }
-    std::cout << "Spaces: " << spaces <<"\n";
-
-    if(spaces > 2) {
-        QMessageBox::warning(this, "Login failed!", "Login or Password are incorrect");
+    std::string reply = client->login(ui->input_login->text().toStdString(), ui->input_pass->text().toStdString());
+    if (reply == "Ok") {
+        run_chat();
         return;
     }
-    if (client->login(ui->input_login->text().toStdString(), ui->input_pass->text().toStdString())) {
-
-	    ///todo move thread to run function
-        std::thread th1([&](){client->run();});
-        th1.detach();
-        wind_chat = new Chat(this, client);
-        wind_chat->show();
-        this->hide();
-    } else {
-        QMessageBox::warning(this, "Login Error", "Wrong Login or Password");
+    if (reply == "Cancel"){
+        ui->err_log->setText("This user is not registered. Can register");
+        return;
+    }
+    if (reply == "Wrong") {
+        ui->err_pass->setText("Wrong Password. Please check your password");
+        return;
     }
 }
 
@@ -68,14 +70,8 @@ int spaces = 0;
 
 void Login::on_btn_reg_clicked()
 {
-    wind_reg = new Registration(this, client);
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    int x = (screenGeometry.width() - wind_reg->width()) / 2;
-    int y = (screenGeometry.height() - wind_reg->height()) / 2;
-    wind_reg->move(x, y);
     wind_reg->show();
     this->hide();
-    //widgets related functionality should be added on construction
 }
 
 void Login::closeEvent(QCloseEvent *event)
@@ -87,7 +83,7 @@ void Login::closeEvent(QCloseEvent *event)
     if(resBtn != QMessageBox::Yes) {
         event->ignore();
     } else {
-        client->disconnect();
+        //client->disconnect("{##}");
         event->accept();
     }
 }

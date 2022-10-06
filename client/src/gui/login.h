@@ -31,8 +31,9 @@ class Login : public QWidget
     Q_OBJECT
 
 public:
-    Login(QWidget *parent = nullptr);
+    Login(Client *client, bool isConnected);
     ~Login();
+    void run_chat();
 
 private slots:
 

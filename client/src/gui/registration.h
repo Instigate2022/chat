@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QString>
 #include <QCloseEvent>
+#include <QDesktopWidget>
 #include "../engine/client.hpp"
 
 namespace Ui {

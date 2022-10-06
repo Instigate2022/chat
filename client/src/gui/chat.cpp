@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <string>
 #include "login.h"
+#include <QIcon>
 
 QList<User*> users;
 
@@ -20,16 +21,16 @@ Chat::Chat(void *parent, Client *client) :
     QWidget(),
     ui(new Ui::Chat)
 {
-    login_wind = parent;
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    int x = (screenGeometry.width() - this->width()) / 2;
+    int y = (screenGeometry.height() - this->height()) / 2;
+    this->move(x, y);
     QLabel *myLabel = new QLabel(this);
     myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg"));
     myLabel->show();
+    login_wind = parent;
     ui->setupUi(this);
-    client->set_chat_window(this);
     this->client = client;
-    QListWidgetItem *server_item = new QListWidgetItem("Server");
-    ui->list_users->addItem(server_item);
-    users.push_back(new User("Server", new QListWidget(), server_item, true));
 //    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
 }
 
@@ -46,9 +47,9 @@ void Chat::on_btn_logOut_clicked()
                                     QMessageBox::Yes);
 
     if(mesBtn == QMessageBox::Yes) {
+        client->logOut();
         users.clear();
-        Login *window = (Login* )login_wind;
-        client->disconnect();
+        Login *window = (Login*)login_wind;
         window->show();
         this->hide();
     } else {
@@ -59,28 +60,31 @@ void Chat::on_btn_logOut_clicked()
 void Chat::on_btn_file_clicked()
 {
     QString filter = "All File (*.*) ;; Text File (*.txt) ;; XML File (*.xml) ;; PDF File (*.pdf)";
-    client->file_link = QFileDialog::getOpenFileName(this,"Open the file",QDir::homePath(),filter).toStdString();
-    std::cout << "File link: " << client->file_link << '\n';
+    std::string file_link = QFileDialog::getOpenFileName(this,"Open the file",QDir::homePath(),filter).toStdString();
     QMessageBox::StandardButton mesBtn = QMessageBox::question( this, "Chosen file",
                                     tr("Do you want to send this file?\n"),
                                     QMessageBox::No | QMessageBox::Yes,
                                     QMessageBox::Yes);
     if(mesBtn == QMessageBox::Yes) {
          std::string to_whom = ui->list_users->currentItem()->text().toStdString();
-         client->sendFile(to_whom);
+         //client->sendFile(to_whom);
     }
-    client->file_link = "";
+    file_link = "";
 }
 
 void Chat::on_btn_send_clicked()
 {
     std::string message = ui->input_msg->text().toStdString();
+    int size = ui->list_users->count();
+    if (size <= 0) {
+        return;
+    }
     std::string to_whom = ui->list_users->currentItem()->text().toStdString();
     client->Send(message, to_whom);
     QListWidgetItem *item = new QListWidgetItem();
     item->setTextAlignment(Qt::AlignRight);
     item->setText(message.c_str());
-    ui->list_chat->insertItem(0,item);
+    ui->list_chat->addItem(item);
     ui->input_msg->clear();
 }
 
@@ -94,32 +98,45 @@ void Chat::closeEvent(QCloseEvent *event)
         event->ignore();
     } else {
         users.clear();
-        client->disconnect();
+        //client->disconnect("{##}");
         event->accept();
     }
 }
 
-void Chat::set_list_message(std::string message)
+template<typename T> void print_vector(std::vector<T> list)
 {
-    std::string name = message;
-    std::cout << "Message = " << message << '\n';
-    int erase_index = name.find_first_of(":");
-    if (erase_index >= 0) {
-        name.erase(name.find_first_of(":"));
+    for(int i = 0; i < list.size(); i++) {
+        std::cout << i << " " << list[i] << '\n';
     }
-    std::cout << "Name: " << name << '\n';
-    User *user = getUser(name);
-    if (user != nullptr) {
-        if (user->chat == nullptr) {
-            user->chat = new QListWidget();
-        }
-        user->chat->insertItem(0, message.c_str());
-        if (ui->list_users->currentItem() != user->item) {
-            user->item->setBackgroundColor(Qt::green);
-        }
+}
+
+void Chat::set_list_message(std::string by_user, std::string message)
+{
+    std::cout << "New Message By user: " << by_user << '\n';
+    std::cout << "Message = " << message << '\n';
+    User *user = getUser(by_user);
+    if (user == nullptr) {
         return;
     }
+    std::cout << "User Finded\n";
+    if (user->chat == nullptr) {
+        user->chat = new QListWidget();
+    }
+    user->chat->addItem(message.c_str());
+    if (user->item == nullptr) {
+        user->item = new QListWidgetItem(user->name.c_str());
+    }
+    if (ui->list_users->currentItem() != user->item) {
+        user->item->setBackgroundColor(Qt::green);
+        user->item->setIcon(QIcon(QPixmap("icon.png")));
+    }
+    return;
+    if (ui->list_chat == nullptr) {
+        std::cout << "Add list widget\n";
+        ui->list_chat = new QListWidget();
+    }
     ui->list_chat->insertItem(0, message.c_str());
+    std::cout << "End insertItem\n";
 }
 
 void Chat::set_users_list(std::string name)
@@ -128,6 +145,7 @@ void Chat::set_users_list(std::string name)
     User* user = getUser(name);
     if (user != nullptr) {
         user->item->setBackgroundColor(Qt::white);
+        user->isOnline = true;
         return;
     }
     QListWidgetItem *user_item = new QListWidgetItem(name.c_str());
@@ -136,12 +154,16 @@ void Chat::set_users_list(std::string name)
     ui->list_users->addItem(user_item);
     QListWidgetItem *prev = ui->list_users->currentItem();
     ui->list_users->setCurrentItem(user_item);
-    ui->list_users->setCurrentItem(prev);
+    if (prev == nullptr) {
+        return;
+    }
+    //ui->list_users->setCurrentItem(prev);
     std::cout << "End set users list\n";
 }
 
 void Chat::on_list_users_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
+    std::cout << "Current item changed\n";
     std::string name = current->text().toStdString();
     User *user = getUser(name);
     if (user == nullptr) return;
@@ -157,6 +179,7 @@ void Chat::on_list_users_currentItemChanged(QListWidgetItem *current, QListWidge
         user->item->setBackgroundColor(Qt::red);
     }
     ui->list_chat->show();
+    std::cout << "End Current Item changed\n";
 }
 
 void Chat::client_disconnected(std::string name)
