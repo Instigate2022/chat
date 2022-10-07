@@ -32,14 +32,16 @@ Chat::Chat(void *parent, Client *client) :
     login_wind = parent;
     ui->setupUi(this);
     this->client = client;
-<<<<<<< HEAD
+
+
+
+
+
 //    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
-=======
     QListWidgetItem *server_item = new QListWidgetItem("Server");
     ui->list_users->addItem(server_item);
     users.push_back(new User("Server", new QListWidget(), server_item, true));
-    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
->>>>>>> 0b3e56989e11cc62b91517360ef305d961e2a16a
+//    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
 }
 
 Chat::~Chat()

@@ -80,7 +80,7 @@ void Client::add_in_users_list(std::string name)
     Chat *window = (Chat*) wind_chat;
     window->set_users_list(name);
     std::cout << "Users list updated\n";
-    name = "Ok";
+    std::string message = "Ok";
     send(serverSocket, name.c_str(), name.size(), 0);
 }
 
@@ -108,14 +108,14 @@ void Client::Send(std::string message, std::string to_whom)
 
 void Client::run()
 {
-    std::string message = "{!!} " + name;
-    send(serverSocket, message.c_str(), message.size(), 0);
     thRecv = std::thread([&](){isExit = Recv();});
     thRecv.detach();
 }
 
 bool Client::Recv()
 {
+    std::string message = "{!!} " + name;
+    send(serverSocket, message.c_str(), message.size(), 0);
     std::cout << "Start recv\n";
     while(!isExit) {
         char buffer[buf_s];

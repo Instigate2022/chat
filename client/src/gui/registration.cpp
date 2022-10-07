@@ -16,9 +16,9 @@ Registration::Registration(QWidget *parent, Client *client) :
     this->client = client;
     this->parent = parent;
     ui->setupUi(this);
-    connect(ui->input_name,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
-    connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
-    connect(ui->input_conf,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
+//    connect(ui->input_name,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
+//    connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
+//    connect(ui->input_conf,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
 }
 
 bool Registration::login_check(std::string user_login)
@@ -94,13 +94,6 @@ Registration::~Registration()
 
 void Registration::on_btn_reg_clicked()
 {
-<<<<<<< HEAD
-=======
-	/// todo think about moving to main
-    if (!client->connect("127.0.0.1", 1233)) {
-        QMessageBox::critical(this, "Connect Error", "Dont connected, try again");
-    }
->>>>>>> 0b3e56989e11cc62b91517360ef305d961e2a16a
     std::string user_login = ui->input_name->text().toStdString();
     std::string pass = ui->input_pass->text().toStdString();
     std::string check = ui->input_conf->text().toStdString();
@@ -119,7 +112,7 @@ void Registration::on_btn_reg_clicked()
         this->hide();
         parent->show();
     } else {
-        //ui->label_3->setText("User with this login is exist");
+        ui->label_3->setText("User with this login is exist");
 	    ui->label_3->setStyleSheet("QLabel { color : red; }");
     }
 }
