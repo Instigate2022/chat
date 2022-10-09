@@ -139,6 +139,7 @@ bool ClientLogin(int client, std::string name, std::string pass)
 
 void Registration(int client, std::string login, std::string pass)
 {
+    std::cout << "In Registration Function\n";
     char buffer[buf_s];
     memset(buffer, 0, sizeof(buffer));
     std::ifstream file(login);
@@ -206,7 +207,7 @@ bool Recv(int client, bool *isExit)
             return true;
         }
         std::vector<std::string> list = split(std::string(buffer), ' ');
-        
+
         print_vector(list);
 
         if (list[0] == "{!!}") {
@@ -229,7 +230,6 @@ bool Recv(int client, bool *isExit)
             SendTo(list[1], std::string(buffer));
         }
     }
-    
 }
 
 void SendTo(std::string to_whom, std::string message)

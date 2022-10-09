@@ -27,7 +27,6 @@ public:
     void run();
 
     std::string login(std::string login, std::string pass);
-    void check_login(std::string reply);
     void set_chat_window(void* wind_chat);
     void add_in_users_list(std::string name);
     bool registration(std::string login, std::string pass);

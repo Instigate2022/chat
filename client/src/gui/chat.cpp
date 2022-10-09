@@ -4,6 +4,9 @@
 #include <string>
 #include "login.h"
 #include <QIcon>
+#include <QPixmap>
+#include <QItemSelection>
+#include <QMetaType>
 
 QList<User*> users;
 
@@ -32,10 +35,13 @@ Chat::Chat(void *parent, Client *client) :
     login_wind = parent;
     ui->setupUi(this);
     this->client = client;
-    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
+
+
+//    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
     QListWidgetItem *server_item = new QListWidgetItem("Server");
     ui->list_users->addItem(server_item);
     users.push_back(new User("Server", new QListWidget(), server_item, true));
+//    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
 }
 
 Chat::~Chat()
@@ -78,6 +84,7 @@ void Chat::on_btn_file_clicked()
 
 void Chat::on_btn_send_clicked()
 {
+
     std::string message = ui->input_msg->text().toStdString();
     int size = ui->list_users->count();
     if (size <= 0) {
@@ -89,10 +96,9 @@ void Chat::on_btn_send_clicked()
     item->setTextAlignment(Qt::AlignRight);
     item->setText(message.c_str());
     ui->list_chat->addItem(item);
-    ui->list_chat->scrollToBottom();
     ui->input_msg->clear();
+    ui->list_chat->scrollToBottom();
 }
-
 
 void Chat::closeEvent(QCloseEvent *event)
 {
@@ -118,32 +124,25 @@ template<typename T> void print_vector(std::vector<T> list)
 
 void Chat::set_list_message(std::string by_user, std::string message)
 {
-	std::string name = message;
-	std::cout << "Message = " << message << '\n';
-	int erase_index = name.find_first_of(":");
-	if (erase_index >= 0) {
-		name.erase(name.find_first_of(":"));
-	}
-	std::cout << "Name: " << name << '\n';
-	User *user = getUser(name);
-	if (user != nullptr) {
-		if (user->chat == nullptr) {
-			user->chat = new QListWidget();
-		}
-		user->chat->addItem(message.c_str());
-		if (ui->list_users->currentItem() != user->item) {
-			user->item->setForeground(Qt::green);
-			user->item->setIcon(QIcon("icon.png"));
-		} else {
-
-			user->item->setIcon(QIcon(""));
-		}
-		return;
-	}
-	 user->item->setText(message.c_str());
-	 std::cout<<"ITEM ADDED"<<std::endl;
-	 ui->list_chat->addItem(user->item);   
-         ui->list_chat->scrollToBottom();
+    std::cout << "New Message By user: " << by_user << '\n';
+    std::cout << "Message = " << message << '\n';
+    User *user = getUser(by_user);
+    if (user == nullptr) {
+        return;
+    }
+    std::cout << "User Finded\n";
+    if (user->chat == nullptr) {
+        user->chat = new QListWidget();
+    }
+    user->chat->addItem(message.c_str());
+    if (user->item == nullptr) {
+        user->item = new QListWidgetItem(user->name.c_str());
+    }
+    if (ui->list_users->currentItem() != user->item) {
+        user->item->setBackgroundColor(Qt::green);
+        user->item->setIcon(QIcon(QPixmap("icon.png")));
+    }
+    user->chat->scrollToBottom();
 }
 
 void Chat::set_users_list(std::string name)
@@ -170,7 +169,7 @@ void Chat::set_users_list(std::string name)
 
 void Chat::on_list_users_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
-   std::cout << "Current item changed\n";
+    Q_UNUSED(previous)
     std::string name = current->text().toStdString();
     ui->label_name->setText(current->text());
     User *user = getUser(name);
@@ -184,18 +183,16 @@ void Chat::on_list_users_currentItemChanged(QListWidgetItem *current, QListWidge
     if (user->isOnline) {
         user->item->setBackgroundColor(Qt::white);
     } else {
-        user->item->setForeground(Qt::red);
+        user->item->setBackgroundColor(Qt::red);
     }
     ui->list_chat->show();
-    std::cout << "End Current Item changed\n";
 }
- 
 
 void Chat::client_disconnected(std::string name)
 {
-	User* user = getUser(name);
-	user->isOnline = false;
-	user->item->setForeground(Qt::red);
+    User* user = getUser(name);
+    user->isOnline = false;
+    user->item->setBackgroundColor(Qt::red);
 }
 
 

@@ -16,7 +16,7 @@ std::vector<std::string> split(std::string str, char ch)
 {
     std::vector<std::string> list;
     std::string buffer = "";
-    for (int i = 0; i < str.size(); ++i) {
+    for (unsigned int i = 0; i < str.size(); ++i) {
         if (str[i] != ch) {
             buffer += str[i];
         } else {
@@ -62,16 +62,10 @@ std::string Client::login(std::string login, std::string pass)
     return list[1];
 }
 
-void Client::check_login(std::string reply)
-{
-    std::cout << "Reply: " << reply << '\n';
-    Login *window = (Login*)wind_login;
-    return;
-}
-
 void Client::set_chat_window(void *wind_chat)
 {
     this->wind_chat = wind_chat;
+    isExit = false;
     LoggedIn = true;
 }
 
@@ -139,6 +133,7 @@ bool Client::Recv()
         }
         other_message(std::string(buffer));
     }
+    return true;
 }
 
 void Client::other_message(std::string message)
