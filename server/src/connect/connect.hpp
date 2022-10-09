@@ -16,7 +16,7 @@
 #include <vector>
 #include <fstream>
 
-#define PORT 1236
+#define PORT 1237
 #define buf_s 1024
 
 void ClientConnect(int client);

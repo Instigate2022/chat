@@ -25,7 +25,7 @@ bool Registration::login_check(std::string user_login)
 {
     if(!((user_login[0] >= 'a' && user_login[0] <= 'z') ||
        (user_login[0] >= 'A' && user_login[0] <= 'Z'))) {
-        ui->label_3->setText("First letter should be a-z or A-Z");
+        ui->label_3->setText("First letter should besymbols !=  a-z or A-Z");
         ui->label_3->setStyleSheet("QLabel { color : red; }");
         return false;
     }
@@ -43,49 +43,58 @@ bool Registration::login_check(std::string user_login)
     }
     return true;
 }
+void Registration::analysis_pass(bool& uppercase,bool& lowercase,bool& number,bool& symbols, std::string pass)
+{
+    std::string symbols_list = "!@#$%^&*_-+=|/;.,:";
+    for(size_t i = 0; i < pass.size(); i++) {    
+            if(pass[i] >='A' && pass[i] <= 'Z') {
+                    uppercase = true;
+            }
+            else if (pass[i] >= 'a' && pass[i] <= 'z') {
+                    lowercase = true;
+            }
+            else if (pass[i] >= '0' && pass[i] <= '9') {
+                    number = true;
+            }
+            else {
+                    for (size_t j = 0; j < symbols_list.size(); j++) {
+                            if (symbols_list[j] == pass[i]) {
+                                    symbols = true;
+                            }    
+                            else 
+                                    symbols = false;
+                    }
+            }
+    } 
+}
 
 bool Registration::pass_check(std::string pass, std::string check)
 {
+
     bool uppercase = false;
     bool lowercase = false;
     bool number = false;
-    bool symbols = false;
+    bool symbols = true;
+
     std::string symbols_list = "!@#$%^&*_-+=|/;.,:";
-
-    if(pass != check) {
-        ui->label_5->setText("Password confirmation failed. Fields do not match.");
-        ui->label_5->setStyleSheet("QLabel { color : red; }");
-        return false;
+    analysis_pass(uppercase,lowercase,number,symbols,pass);
+    if(symbols != 1) {
+        ui->label_4->setText("Password only can contain these !@#$%^&*_-+=|/;.,: symbols");
+        ui->label_4->setStyleSheet("QLabel { color : red; }");
     }
-    for(size_t i = 0; i < pass.size(); i++) {
-        if(pass[i] >='A' && pass[i] <= 'Z') {
-            uppercase = true;
-        }
-        if (pass[i] >= 'a' && pass[i] <= 'z') {
-            lowercase = true;
-        }
-        if (pass[i] >= '0' && pass[i] <= '9') {
-            number = true;
-        }
-        for (size_t j = 0; j < symbols_list.size(); j++) {
-            if (symbols_list[j] == pass[i]) {
-                symbols = true;
-            }
-        }
-    }
-
-    if(pass.size() < 4) {
-        ui->label_4->setText("Password must contain at least 4 characters.");
+    else if(uppercase == 0 || lowercase == 0 || number == 0) {
+        ui->label_4->setText("Password must contain at least one lowercase, uppercase and number.");
         ui->label_4->setStyleSheet("QLabel { color : red; }");
         return false;
     }
-    if(uppercase == 0 || lowercase == 0 || number == 0 || symbols == 0) {
-        ui->label_4->setText("Password must contain at least one lowercase, uppercase and number.");
+    else if(pass.size() < 4) {
+        ui->label_4->setText("Password must contain at least 4 characters.");
         ui->label_4->setStyleSheet("QLabel { color : red; }");
         return false;
     }
     return true;
 }
+
 
 Registration::~Registration()
 {
@@ -132,14 +141,27 @@ void Registration::on_input_name_textEdited(const QString &arg1)
            return;
        }
 }
-
 void Registration::on_input_conf_textEdited(const QString &arg1)
 {
     ui->label_4->setText("");
     ui->label_5->setText("");
-    if(!(pass_check(ui->input_pass->text().toStdString(), ui->input_conf->text().toStdString()))) {
+    if(ui->input_pass->text().toStdString() != ui->input_conf->text().toStdString()) {
+        ui->label_5->setText("Password confirmation failed. Fields do not match.");
+        ui->label_5->setStyleSheet("QLabel { color : red; }");
         return;
     }
+    if(!(pass_check(ui->input_pass->text().toStdString(), ui->input_conf->text().toStdString()))) {
+               return;
+       }
+
+}
+void Registration::on_input_pass_textEdited(const QString &arg1)
+{
+    ui->label_4->setText("");
+    ui->label_5->setText("");
+    if(!(pass_check(ui->input_pass->text().toStdString(), ui->input_conf->text().toStdString()))) {
+               return;
+       }
 }
 
 void Registration::closeEvent(QCloseEvent *event)

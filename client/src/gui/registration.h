@@ -17,6 +17,7 @@ class Registration : public QWidget
     Q_OBJECT
 
 public:
+    void analysis_pass(bool& uppercase,bool& lowercase,bool& number,bool& symbols,std::string pass);
     explicit Registration(QWidget *parent, Client *client);
     bool pass_check(std::string pass, std::string check);
     bool login_check(std::string user_login);
@@ -30,6 +31,7 @@ private slots:
     void on_input_name_textEdited(const QString &arg1);
 
     void on_input_conf_textEdited(const QString &arg1);
+    void on_input_pass_textEdited(const QString &arg1);
 
     void closeEvent(QCloseEvent *event);
 

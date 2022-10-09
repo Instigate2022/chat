@@ -1,7 +1,7 @@
 #include "src/gui/login.h"
-#include "client.hpp"
+#include "../client/src/engine/client.hpp"
 #define IP "127.0.0.1"
-#define PORT 1236
+#define PORT 1237
 
 #include <QApplication>
 
