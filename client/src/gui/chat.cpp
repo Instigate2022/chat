@@ -37,7 +37,7 @@ Chat::Chat(void *parent, Client *client) :
     this->client = client;
 
 
-//    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
+    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
     QListWidgetItem *server_item = new QListWidgetItem("Server");
     ui->list_users->addItem(server_item);
     users.push_back(new User("Server", new QListWidget(), server_item, true));
@@ -124,6 +124,7 @@ template<typename T> void print_vector(std::vector<T> list)
 
 void Chat::set_list_message(std::string by_user, std::string message)
 {
+    ui->list_chat->scrollToBottom();
     std::cout << "New Message By user: " << by_user << '\n';
     std::cout << "Message = " << message << '\n';
     User *user = getUser(by_user);
@@ -139,10 +140,12 @@ void Chat::set_list_message(std::string by_user, std::string message)
         user->item = new QListWidgetItem(user->name.c_str());
     }
     if (ui->list_users->currentItem() != user->item) {
-        user->item->setBackgroundColor(Qt::green);
-        user->item->setIcon(QIcon(QPixmap("icon.png")));
+        user->item->setForeground(Qt::green);
+        user->item->setIcon(QIcon(QPixmap("src/gui/icon.jpg")));
     }
-    user->chat->scrollToBottom();
+    else {
+		user->item->setIcon(QIcon(QPixmap("")));
+    }
 }
 
 void Chat::set_users_list(std::string name)
@@ -150,7 +153,7 @@ void Chat::set_users_list(std::string name)
     std::cout << "Add " << name << " In List Widget\n";
     User* user = getUser(name);
     if (user != nullptr) {
-        user->item->setBackgroundColor(Qt::white);
+        user->item->setForeground(Qt::green);
         user->isOnline = true;
         return;
     }
@@ -178,12 +181,13 @@ void Chat::on_list_users_currentItemChanged(QListWidgetItem *current, QListWidge
         user->chat = new QListWidget();
     }
     ui->list_chat->hide();
+    user->item->setIcon(QIcon(QPixmap("")));
     ui->list_chat = user->chat;
     ui->verticalLayout->insertWidget(1, ui->list_chat);
     if (user->isOnline) {
-        user->item->setBackgroundColor(Qt::white);
+        user->item->setForeground(Qt::green);
     } else {
-        user->item->setBackgroundColor(Qt::red);
+        user->item->setForeground(Qt::red);
     }
     ui->list_chat->show();
 }
@@ -192,7 +196,7 @@ void Chat::client_disconnected(std::string name)
 {
     User* user = getUser(name);
     user->isOnline = false;
-    user->item->setBackgroundColor(Qt::red);
+    user->item->setForeground(Qt::red);
 }
 
 
