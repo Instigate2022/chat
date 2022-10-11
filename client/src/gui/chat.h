@@ -10,7 +10,6 @@
 #include <QFileDialog>
 #include "../engine/client.hpp"
 
-
 namespace Ui {
 class Chat;
 }
@@ -31,18 +30,26 @@ private slots:
 
     void on_btn_send_clicked();
 
-    void on_btn_logOut_clicked();
-
-    void closeEvent(QCloseEvent *event);
-
-    void on_list_users_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
-    void on_show_users_clicked();
+    void on_btn_logOut_clicked();                                                                                                                                                             
+                                                                                                                                                                                              
+    void contextMenuEvent ( QContextMenuEvent * event ) ;                                                                                                                                     
+                                                                                                                                                                                              
+    void closeEvent(QCloseEvent *event);                                                                                                                                                      
+                                                                                                                                                                                              
+    void on_list_users_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);                                                                                               
+                                                                                                                                                                                              
+    void on_show_users_clicked();                                                                                                                                                             
+                                                                                                                                                                                              
+    void deleteSeedSlot();                                                                                                                                                                    
+    void clearSeedsSlot();                                                                                                                                                                    
+    void editSeedsSlot();                                                                                                                                                                     
+                                                                                                                                                                                              
 
 private:
     Ui::Chat *ui;
     void *login_wind;
     Client *client;
+    bool isEdit = false;
 
 };
 

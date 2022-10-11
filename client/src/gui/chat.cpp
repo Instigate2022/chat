@@ -7,6 +7,7 @@
 #include <QPixmap>
 #include <QItemSelection>
 #include <QMetaType>
+#include <QMenu>
 
 QList<User*> users;
 
@@ -209,5 +210,62 @@ void Chat::on_show_users_clicked()
         ui->show_users->setText(">");
         ui->list_users->hide();
     }
+}
+void Chat::contextMenuEvent ( QContextMenuEvent * event )
+{
+    QMenu* popMenu = new QMenu(this);
+    QAction *deleteSeed = new QAction(tr("Delete"), this);
+    QAction *clearSeeds = new QAction(tr("Clear"), this);
+    QAction *editSeeds = new QAction(tr("Edit"), this);
+    popMenu->addAction(deleteSeed);
+    popMenu->addAction(clearSeeds);
+    popMenu->addAction(editSeeds);
+    connect(deleteSeed, SIGNAL(triggered()), this, SLOT(deleteSeedSlot()));
+    connect(clearSeeds, SIGNAL(triggered()), this, SLOT(clearSeedsSlot()));
+    connect(editSeeds, SIGNAL(triggered()), this, SLOT(editSeedsSlot()));
+    popMenu->exec(QCursor::pos());
+}
+ 
+void Chat::deleteSeedSlot()
+{
+    int ch = QMessageBox::warning(NULL, "Warning",
+                                  "Are you sure to delete seed ?",
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  QMessageBox::No);
+ 
+    if ( ch != QMessageBox::Yes )
+        return;
+ 
+    QListWidgetItem * item = ui->list_chat->currentItem();
+    if( item == NULL )
+        return;
+    item->setText(" deleted message")  ;
+}
+
+void Chat::clearSeedsSlot()    
+{                                                                                                                                                                                             
+    int ch = QMessageBox::warning(NULL, "Warning",                                                                                                                                            
+                                  "Are you sure to clear seeds ?",
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  QMessageBox::No);
+
+    if ( ch != QMessageBox::Yes )
+        return;
+
+    QListWidgetItem * item = ui->list_chat->currentItem();
+    if( item == NULL )
+        return;
+
+    ui->list_chat->clear();
+}
+
+void Chat::editSeedsSlot()
+{
+    isEdit = true;
+    QListWidgetItem *item = ui->list_chat->currentItem();
+    if (item == NULL)
+        return;
+    ui->input_msg->setText(item->text());
+
 }
 
