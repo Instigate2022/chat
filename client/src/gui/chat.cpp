@@ -162,7 +162,6 @@ void Chat::set_users_list(std::string name)
     if (prev == nullptr) {
         return;
     }
-    //ui->list_users->setCurrentItem(prev);
     std::cout << "End set users list\n";
 }
 

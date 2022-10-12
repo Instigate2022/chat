@@ -18,7 +18,6 @@ QT_END_NAMESPACE
 struct User
 {
     User(std::string name, QListWidget *chat, QListWidgetItem *item, bool isOnline);
-
     std::string name;
     QListWidget* chat = nullptr;
     QListWidgetItem *item = nullptr;
@@ -35,11 +34,8 @@ public:
     void run_chat();
 
 private slots:
-
-    void on_btn_login_clicked();
-
     void on_btn_reg_clicked();
-
+    void on_btn_login_clicked();
     void closeEvent(QCloseEvent *event);
 
 private:
@@ -47,5 +43,6 @@ private:
     Client *client;
     Chat *wind_chat;
     Registration *wind_reg;
+    bool isConnected;
 };
 #endif // LOGIN_H

@@ -13,10 +13,7 @@ Login::Login(Client* client, bool isConnected)
     : QWidget()
       , ui(new Ui::Login)
 {
-    if(!isConnected) {
-        QMessageBox::critical(this, "Connect Error", "Don`t connected");
-        exit(1);
-    }
+    this->isConnected = isConnected;
     wind_reg = new Registration(this, client);
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     int x = (screenGeometry.width() - this->width()) / 2;
@@ -32,6 +29,9 @@ Login::Login(Client* client, bool isConnected)
     ui->err_pass->setStyleSheet("QLabel { color : red; }");
     connect(ui->input_login,  &QLineEdit::returnPressed, this, &Login::on_btn_login_clicked);
     connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Login::on_btn_login_clicked);
+    if(!isConnected) {
+        QMessageBox::critical(this, "Connect Error", "Don`t connected");
+    }
 }
 
 Login::~Login()
@@ -50,6 +50,10 @@ void Login::run_chat()
 
 void Login::on_btn_login_clicked()
 {
+    if(!isConnected) {
+        QMessageBox::critical(this, "Connect Error", "Don`t connected");
+        return;
+    }
     ui->err_pass->clear();
     ui->err_log->clear();
     std::cout << "Start Login\n";
@@ -71,6 +75,10 @@ void Login::on_btn_login_clicked()
 
 void Login::on_btn_reg_clicked()
 {
+    if(!isConnected) {
+        QMessageBox::critical(this, "Connect Error", "Don`t connected");
+        return;
+    }
     wind_reg->show();
     this->hide();
 }
