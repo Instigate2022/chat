@@ -142,7 +142,7 @@ void Registration(int client, std::string login, std::string pass)
     std::cout << "In Registration Function\n";
     char buffer[buf_s];
     memset(buffer, 0, sizeof(buffer));
-    std::ifstream file(login);
+    std::ifstream file("user-pass.json");
     if (file.is_open()) {
         file.close();
         strcpy(buffer, "Is Exist");
@@ -150,8 +150,8 @@ void Registration(int client, std::string login, std::string pass)
         send(client, buffer, sizeof(buffer), 0);
         return;
     }
-    std::ofstream user_file(login);
-    user_file << pass;
+    std::ofstream user_file("user-pass.json");
+    user_file[login] = pass;
     user_file.close();
     strcpy(buffer, "Ok");
     send(client, buffer, sizeof(buffer), 0);

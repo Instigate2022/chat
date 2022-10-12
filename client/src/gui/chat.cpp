@@ -1,13 +1,6 @@
 #include "chat.h"
 #include "ui_chat.h"
-#include <QLabel>
-#include <string>
 #include "login.h"
-#include <QIcon>
-#include <QPixmap>
-#include <QItemSelection>
-#include <QMetaType>
-#include <QMenu>
 
 QList<User*> users;
 
@@ -36,13 +29,10 @@ Chat::Chat(void *parent, Client *client) :
     login_wind = parent;
     ui->setupUi(this);
     this->client = client;
-
-
     connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
     QListWidgetItem *server_item = new QListWidgetItem("Server");
     ui->list_users->addItem(server_item);
     users.push_back(new User("Server", new QListWidget(), server_item, true));
-//    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
 }
 
 Chat::~Chat()
@@ -85,6 +75,11 @@ void Chat::on_btn_file_clicked()
 
 void Chat::on_btn_send_clicked()
 {
+ if (isEdit == true) {
+        ui->list_chat->currentItem()->setText(ui->input_msg->text() + " (edited)");
+        isEdit = false;
+        return;
+    }
 
     std::string message = ui->input_msg->text().toStdString();
     int size = ui->list_users->count();
@@ -200,7 +195,6 @@ void Chat::client_disconnected(std::string name)
     user->item->setForeground(Qt::red);
 }
 
-
 void Chat::on_show_users_clicked()
 {
     if (ui->list_users->isHidden()) {
@@ -211,6 +205,7 @@ void Chat::on_show_users_clicked()
         ui->list_users->hide();
     }
 }
+
 void Chat::contextMenuEvent ( QContextMenuEvent * event )
 {
     QMenu* popMenu = new QMenu(this);
@@ -266,6 +261,4 @@ void Chat::editSeedsSlot()
     if (item == NULL)
         return;
     ui->input_msg->setText(item->text());
-
 }
-

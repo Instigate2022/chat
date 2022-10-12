@@ -1,7 +1,6 @@
 ﻿#include "registration.h"
 #include "ui_registration.h"
 
-
 Registration::Registration(QWidget *parent, Client *client) :
     QWidget(),
     ui(new Ui::Registration)
@@ -16,9 +15,9 @@ Registration::Registration(QWidget *parent, Client *client) :
     this->client = client;
     this->parent = parent;
     ui->setupUi(this);
-//    connect(ui->input_name,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
-//    connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
-//    connect(ui->input_conf,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
+    connect(ui->input_name,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
+    connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
+    connect(ui->input_conf,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
 }
 
 bool Registration::login_check(std::string user_login)
@@ -76,35 +75,6 @@ bool Registration::pass_check(std::string pass, std::string check)
         return false;
     }
     return true;
-/*
-    for(size_t i = 0; i < pass.size(); i++) {
-        if(pass[i] >='A' && pass[i] <= 'Z') {
-            uppercase = true;
-        }
-        if (pass[i] >= 'a' && pass[i] <= 'z') {
-            lowercase = true;
-        }
-        if (pass[i] >= '0' && pass[i] <= '9') {
-            number = true;
-        }
-        for (size_t j = 0; j < symbols_list.size(); j++) {
-            if (symbols_list[j] == pass[i]) {
-                symbols = true;
-            }
-        }
-    }
-    if(pass.size() < 4) {
-        ui->label_4->setText("Password must contain at least 4 characters.");
-        ui->label_4->setStyleSheet("QLabel { color : red; }");
-        return false;
-    }
-    if(uppercase == 0 || lowercase == 0 || number == 0 || symbols == 0) {
-        ui->label_4->setText("Password must contain at least one lowercase, uppercase and number.");
-        ui->label_4->setStyleSheet("QLabel { color : red; }");
-        return false;
-    }
-    return true;
-*/
 }
 
 Registration::~Registration()
@@ -112,7 +82,7 @@ Registration::~Registration()
     delete ui;
 }
 
-void Registration::analysis_pass(   bool& uppercase,bool& lowercase,bool& number,bool& symbols, std::string pass)
+void Registration::analysis_pass(bool& uppercase,bool& lowercase,bool& number,bool& symbols, std::string pass)
 {
     std::cout << "\n\n ANALYS START\n";
     std::string symbols_list = "!@#$%^&*_-+=|/;.,:";
@@ -171,7 +141,6 @@ void Registration::on_btn_cancel_clicked()
     this->hide();
     parent->show();
 }
-
 
 void Registration::on_input_name_textEdited(const QString &arg1)
 {

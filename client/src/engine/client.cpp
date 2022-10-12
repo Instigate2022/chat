@@ -6,11 +6,9 @@
 #include <thread>
 #include <string.h>
 #include <fstream>
-
 #include "client.hpp"
 #include "../gui/chat.h"
 #include "../gui/login.h"
-
 
 std::vector<std::string> split(std::string str, char ch)
 {

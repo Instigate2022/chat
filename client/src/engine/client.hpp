@@ -8,7 +8,6 @@
 
 #define buf_s 1024
 
-
 std::vector<std::string> split(std::string str, char ch);
 
 class Client{
@@ -30,7 +29,6 @@ public:
     void set_chat_window(void* wind_chat);
     void add_in_users_list(std::string name);
     bool registration(std::string login, std::string pass);
-
     void Send(std::string message, std::string to_whom);
     bool Recv();
     void other_message(std::string message);

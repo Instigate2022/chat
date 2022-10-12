@@ -26,23 +26,18 @@ Login::Login(Client* client, bool isConnected)
     myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg"));
     myLabel->show();
     ui->setupUi(this);
-
-
-
     this->client = client;
     this->show();
     ui->err_log->setStyleSheet("QLabel { color : red; }");
     ui->err_pass->setStyleSheet("QLabel { color : red; }");
-//    connect(ui->input_login,  &QLineEdit::returnPressed, this, &Login::on_btn_login_clicked);
-//    connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Login::on_btn_login_clicked);
+    connect(ui->input_login,  &QLineEdit::returnPressed, this, &Login::on_btn_login_clicked);
+    connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Login::on_btn_login_clicked);
 }
 
 Login::~Login()
 {
     delete ui;
 }
-
-
 
 void Login::run_chat()
 {
@@ -74,7 +69,6 @@ void Login::on_btn_login_clicked()
     }
 }
 
-
 void Login::on_btn_reg_clicked()
 {
     wind_reg->show();
@@ -94,4 +88,3 @@ void Login::closeEvent(QCloseEvent *event)
         event->accept();
     }
 }
-

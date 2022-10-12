@@ -1,17 +1,15 @@
 #ifndef LOGIN_H
 #define LOGIN_H
 
-#include <QWidget>
-#include <QTextStream>
-#include <iostream>
-#include <QDesktopWidget>
-#include <QListWidget>
-
-
 #include "chat.h"
 #include "registration.h"
 #include "../engine/client.hpp"
+#include <iostream>
+#include <QWidget>
 #include <QThread>
+#include <QTextStream>
+#include <QListWidget>
+#include <QDesktopWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Login; }
