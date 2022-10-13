@@ -1,3 +1,5 @@
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -9,6 +11,8 @@
 #include "client.hpp"
 #include "../gui/chat.h"
 #include "../gui/login.h"
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 
 std::vector<std::string> split(std::string str, char ch)
 {
@@ -157,3 +161,54 @@ void Client::logOut()
     name = "";
     std::cout << "Log Out message: " << message << '\n';
 }
+
+
+void Client::sendFile(std::string to_whom)
+{
+	if(file_link == "") {
+		return;
+	}
+	std::string file_name = file_link;
+	file_name.erase(0, file_name.find_last_of("/") + 1);
+	std::string message = "{FILE} " + to_whom + " " + file_name;
+	send(serverSocket, message.c_str(), message.size(), 0);
+
+	char buffer[buf_s];
+	recv(serverSocket, buffer, buf_s, 0);
+	std::cout << "Server ready recv file: " << buffer << '\n';
+	memset(buffer, 0, buf_s);
+	std::fstream file;
+	file.open(file_link,std::ios_base::in | std::ios_base::binary);
+
+	if(file.is_open()) {
+		int file_size = fs::file_size(file_link) + 1;
+
+		char* bytes = new char [file_size];
+		file.read(bytes,file_size);
+
+		send(serverSocket, std::to_string(file_size).c_str(), 16, 0);
+		send(serverSocket, bytes, file_size, 0);
+
+	}
+
+	std::string end_signal = "{END OF FILE}";
+        send(serverSocket, end_signal.c_str(), end_signal.size(), 0);
+	file.close();
+}
+/*
+bool Client::RecvFile()
+{
+    FILE* fp;
+    char buffer[buf_s];
+    int ch = 0;
+    fp = fopen("recievd.txt" ,"a");
+    int words;
+    recv(serverSocket, &words, sizeof(int), 0);
+    while(ch != words)
+    {
+        recv(serverSocket, buffer, buf_s,0);
+        fprintf(fp,"%s", buffer);
+    }
+    file_link = "";
+}
+*/

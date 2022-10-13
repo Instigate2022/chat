@@ -61,16 +61,17 @@ void Chat::on_btn_logOut_clicked()
 void Chat::on_btn_file_clicked()
 {
     QString filter = "All File (*.*) ;; Text File (*.txt) ;; XML File (*.xml) ;; PDF File (*.pdf)";
-    std::string file_link = QFileDialog::getOpenFileName(this,"Open the file",QDir::homePath(),filter).toStdString();
+    client->file_link = QFileDialog::getOpenFileName(this,"Open the file",QDir::homePath(),filter).toStdString();
+    std::cout << "File link: " << client->file_link << '\n';
     QMessageBox::StandardButton mesBtn = QMessageBox::question( this, "Chosen file",
                                     tr("Do you want to send this file?\n"),
                                     QMessageBox::No | QMessageBox::Yes,
                                     QMessageBox::Yes);
     if(mesBtn == QMessageBox::Yes) {
          std::string to_whom = ui->list_users->currentItem()->text().toStdString();
-         //client->sendFile(to_whom);
+         client->sendFile(to_whom);
     }
-    file_link = "";
+    client->file_link = "";
 }
 
 void Chat::on_btn_send_clicked()

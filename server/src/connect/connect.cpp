@@ -136,13 +136,11 @@ bool ClientLogin(int client, std::string name, std::string pass)
     send(client, message.c_str(), message.size(), 0);
     return true;
 }
-
 void Registration(int client, std::string login, std::string pass)
 {
-    std::cout << "In Registration Function\n";
     char buffer[buf_s];
     memset(buffer, 0, sizeof(buffer));
-    std::ifstream file("user-pass.json");
+    std::ifstream file(login);
     if (file.is_open()) {
         file.close();
         strcpy(buffer, "Is Exist");
@@ -150,13 +148,12 @@ void Registration(int client, std::string login, std::string pass)
         send(client, buffer, sizeof(buffer), 0);
         return;
     }
-    std::ofstream user_file("user-pass.json");
-    user_file[login] = pass;
+    std::ofstream user_file(login);
+    user_file << pass;
     user_file.close();
     strcpy(buffer, "Ok");
     send(client, buffer, sizeof(buffer), 0);
 }
-
 void addConnectedClients(int client)
 {
 
@@ -221,7 +218,9 @@ bool Recv(int client, bool *isExit)
         if (list[0] == "{?}") {
             ClientLogin(client, list[1], list[2]);
             continue;
-        }
+        }else if (list[0] == "{FILE}") {
+                recvFile(client, list[1], list[2]);
+            }
         if (list[0] == "{??}") {
             Registration(client, list[1], list[2]);
             continue;
@@ -262,42 +261,44 @@ void clientLogOut(std::string name)
     }
 }
 
+
+void recvFile(int client, std::string to_whom, std::string file_name)
+{
+	std::cout << "To: " << to_whom << '\n';
+	std::cout << "File name: " << file_name << '\n';
+	std::string msg = "Ready Read\n";
+	send(client, msg.c_str(), msg.size(), 0);
+
+	char file_size_str[16];
+	recv(client, file_size_str, 16, 0);
+	int file_size = atoi(file_size_str);
+	char * bytes = new char[file_size];
+
+	std::fstream file;
+	file.open(file_name,std::ios_base::out | std::ios_base::binary);
+
+	if(file.is_open()) {
+		recv(client, bytes, file_size, 0);	
+		file.write(bytes,file_size);
+	}
+	delete [] bytes;
+	file.close();
+	std::cout << "End signal: " << '\n';
+}
+
+
+
 void clientDisconnected(int client)
 {
     Client* user = clients_list.getClientBySocket(client);
-    if (user == nullptr) {
-        return;
-    }
     std::cout << "Remove user: " << user->name << '\n';
     clients_list.remove(user);
     std::cout << "Connected Clients: " << clients_list.size() << '\n';
     std::string message = "{#} " + user->name + " Disconnected\n";
     for (int i = 0; i < clients_list.size(); ++i) {
-        char buffer[buf_s];
         Client* user = clients_list.getClientByIndex(i);
         send(user->socket, message.c_str(), message.size(), 0);
     }
-}
-
-void recvFile(int client, std::string to_whom, std::string file_name)
-{
-    std::cout << "To: " << to_whom << '\n';
-    std::cout << "File name: " << file_name << '\n';
-    std::string msg = "Ready Read\n";
-    send(client, msg.c_str(), msg.size(), 0);
-    std::string file_buffer = "";
-    char buffer[buf_s];
-    memset(buffer, 0, buf_s);
-    while (std::string(buffer) != "{END OF FILE}") {
-        memset(buffer, 0, buf_s);
-        recv(client, buffer, buf_s, 0);
-        if (std::string(buffer) == "{END OF FILE}") break;
-        file_buffer += buffer;
-    }
-    std::cout << "End signal: " << buffer << '\n';
-    std::cout << "File buffer =>\n" << file_buffer << '\n';
-    std::ofstream file(file_name.c_str());
-    file << file_buffer;
 }
 
 std::vector<std::string> split(std::string a, char b)

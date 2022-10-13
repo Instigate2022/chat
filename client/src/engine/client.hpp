@@ -21,15 +21,19 @@ private:
     bool isExit;
     std::thread thRecv;
 
+
 public:
     bool Connect(std::string ip, int port);
     void run();
 
+    std::string file_link = "";
     std::string login(std::string login, std::string pass);
     void set_chat_window(void* wind_chat);
     void add_in_users_list(std::string name);
     bool registration(std::string login, std::string pass);
     void Send(std::string message, std::string to_whom);
+    void sendFile(std::string to_whom);
+    bool RecvFile();
     bool Recv();
     void other_message(std::string message);
     void logOut();
