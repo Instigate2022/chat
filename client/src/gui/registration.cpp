@@ -1,10 +1,11 @@
 ﻿#include "registration.h"
 #include "ui_registration.h"
 
-Registration::Registration(QWidget *parent, Client *client) :
+Registration::Registration(QWidget *parent, Client *client, bool isConnected) :
     QWidget(),
     ui(new Ui::Registration)
 {
+    this->isConnected = isConnected;
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     int x = (screenGeometry.width() - this->width()) / 2;
     int y = (screenGeometry.height() - this->height()) / 2;
@@ -18,6 +19,9 @@ Registration::Registration(QWidget *parent, Client *client) :
     connect(ui->input_name,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
     connect(ui->input_pass,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
     connect(ui->input_conf,  &QLineEdit::returnPressed, this, &Registration::on_btn_reg_clicked);
+    if(!isConnected) {
+        QMessageBox::critical(this, "Connect Error", "Don`t connected");
+    }
 }
 
 bool Registration::login_check(std::string user_login)
@@ -118,6 +122,10 @@ void Registration::analysis_pass(bool& uppercase,bool& lowercase,bool& number,bo
 
 void Registration::on_btn_reg_clicked()
 {
+    if(!isConnected) {
+        QMessageBox::critical(this, "Connect Error", "Don`t connected");
+        return;
+    }
     std::string user_login = ui->input_name->text().toStdString();
     std::string pass = ui->input_pass->text().toStdString();
     std::string check = ui->input_conf->text().toStdString();

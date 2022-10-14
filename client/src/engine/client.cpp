@@ -59,6 +59,10 @@ std::string Client::login(std::string login, std::string pass)
     std::string message = "{?} " + login + " " + pass;
     send(serverSocket, message.c_str(), message.size(), 0);
     recv(serverSocket, buffer, buf_s, 0);
+    std::cout << "buffer size" << std::string(buffer).size() << '\n';
+    if (std::string(buffer).size() <= 0) {
+        return "error";
+    }
     std::cout << "Recv: " << buffer << '\n';
     std::vector<std::string> list = split(std::string(buffer), ' ');
     return list[1];

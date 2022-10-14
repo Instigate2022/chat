@@ -17,7 +17,7 @@ class Registration : public QWidget
     Q_OBJECT
 
 public:
-    explicit Registration(QWidget *parent, Client *client);
+    explicit Registration(QWidget *parent, Client *client, bool isConnected);
     bool pass_check(std::string pass, std::string check);
     bool login_check(std::string user_login);
     ~Registration();
@@ -42,6 +42,7 @@ private:
     Ui::Registration *ui;
     int serverSocket;
     Client *client;
+    bool isConnected;
 };
 
 #endif // REGISTRATION_H

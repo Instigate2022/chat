@@ -14,7 +14,7 @@ Login::Login(Client* client, bool isConnected)
       , ui(new Ui::Login)
 {
     this->isConnected = isConnected;
-    wind_reg = new Registration(this, client);
+    wind_reg = new Registration(this, client, isConnected);
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
     int x = (screenGeometry.width() - this->width()) / 2;
     int y = (screenGeometry.height() - this->height()) / 2;
@@ -58,6 +58,7 @@ void Login::on_btn_login_clicked()
     ui->err_log->clear();
     std::cout << "Start Login\n";
     std::string reply = client->login(ui->input_login->text().toStdString(), ui->input_pass->text().toStdString());
+    std::cout << "Reply: " << reply << '\n';
     if (reply == "Ok") {
         run_chat();
         return;
@@ -69,9 +70,15 @@ void Login::on_btn_login_clicked()
     if (reply == "Wrong") {
         ui->err_pass->setText("Wrong Password. Please check your password");
         return;
-	wind_chat = new Chat(this, client);
     }
+    if (reply == "error") {
+        isConnected = false;
+        QMessageBox::critical(this, "Connect Error", "Don`t connected");
+        return;
+    }
+	wind_chat = new Chat(this, client);
 }
+
 
 void Login::on_btn_reg_clicked()
 {
