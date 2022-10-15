@@ -60,6 +60,8 @@ void Login::on_btn_login_clicked()
     std::string reply = client->login(ui->input_login->text().toStdString(), ui->input_pass->text().toStdString());
     std::cout << "Reply: " << reply << '\n';
     if (reply == "Ok") {
+        ui->input_login->clear();
+        ui->input_pass->clear();
         run_chat();
         return;
     }

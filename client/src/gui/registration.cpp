@@ -135,7 +135,11 @@ void Registration::on_btn_reg_clicked()
     if(!(pass_check(pass, check))) {
         return;
     }
-    if(client->registration(ui->input_name->text().toStdString(), ui->input_pass->text().toStdString())) {
+    if(client->registration(ui->input_name->text().toStdString(), ui->input_pass->text().toStdString())){
+
+        ui->input_name->clear();
+        ui->input_pass->clear();
+        ui->input_conf->clear();
         this->hide();
         parent->show();
     } else {
