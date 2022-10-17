@@ -255,7 +255,6 @@ void clientLogOut(std::string name)
     std::cout << "Remove: " << user->name << " by socket: " << user->socket << '\n';
     std::string message = "{#} " + user->name + " Disconnected\n";
     for (int i = 0; i < clients_list.size(); ++i) {
-        char buffer[buf_s];
         Client* send_to = clients_list.getClientByIndex(i);
         send(send_to->socket, message.c_str(), message.size(), 0);
     }
@@ -291,11 +290,15 @@ void recvFile(int client, std::string to_whom, std::string file_name)
 void clientDisconnected(int client)
 {
     Client* user = clients_list.getClientBySocket(client);
+    if (user == nullptr) {
+         return;
+     }
     std::cout << "Remove user: " << user->name << '\n';
     clients_list.remove(user);
     std::cout << "Connected Clients: " << clients_list.size() << '\n';
     std::string message = "{#} " + user->name + " Disconnected\n";
     for (int i = 0; i < clients_list.size(); ++i) {
+        char buffer[buf_s];
         Client* user = clients_list.getClientByIndex(i);
         send(user->socket, message.c_str(), message.size(), 0);
     }
