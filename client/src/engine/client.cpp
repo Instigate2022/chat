@@ -12,6 +12,7 @@
 #include "../gui/chat.h"
 #include "../gui/login.h"
 #include <experimental/filesystem>
+
 namespace fs = std::experimental::filesystem;
 
 std::vector<std::string> split(std::string str, char ch)
@@ -165,7 +166,6 @@ void Client::logOut()
     name = "";
     std::cout << "Log Out message: " << message << '\n';
 }
-
 
 void Client::sendFile(std::string to_whom)
 {

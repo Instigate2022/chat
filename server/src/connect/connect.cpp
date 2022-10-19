@@ -1,5 +1,8 @@
 #include "connect.hpp"
 
+std::ofstream infile;
+Json::Value user_json;
+
 struct Client
 {
     std::string name;
@@ -119,6 +122,29 @@ void setClientsList(int socket, std::string login)
 
 bool ClientLogin(int client, std::string name, std::string pass)
 {
+    Json::Value temp = user_json[name];
+    std::string message;
+    bool answer = false;
+    if(temp.isNull()){
+        message = "{?} Cancel";
+    }
+    else{
+
+        Json::FastWriter fast_writer;
+        std::string data_pass = fast_writer.write(user_json[name]);
+
+        data_pass = data_pass.substr(1, data_pass.size() - 3);
+        if(pass != data_pass){
+            message = "{?} Wrong";
+        }
+        else{
+            message = "{?} Ok";
+            answer = true;
+        }
+    }
+    send(client, message.c_str(), message.size(),0);
+    return answer;
+    /*
     std::ifstream file(name);
     if(!file.is_open()) {
         std::string message = "{?} Cancel";
@@ -135,11 +161,27 @@ bool ClientLogin(int client, std::string name, std::string pass)
     std::string message = "{?} Ok";
     send(client, message.c_str(), message.size(), 0);
     return true;
+    */
 }
 void Registration(int client, std::string login, std::string pass)
 {
     char buffer[buf_s];
     memset(buffer, 0, sizeof(buffer));
+
+    std::cout<<"temp:"<<user_json<<'\n';
+    if(user_json[login].isNull()){
+        write_user_to_json(user_json, login, pass);
+        strcpy(buffer, "Ok");
+        send(client, buffer, sizeof(buffer), 0);
+    }
+    else{
+        std::cout << "else\n";
+        strcpy(buffer, "Is Exist");
+        send(client, buffer, sizeof(buffer), 0);
+    }
+
+
+    /*
     std::ifstream file(login);
     if (file.is_open()) {
         file.close();
@@ -153,10 +195,20 @@ void Registration(int client, std::string login, std::string pass)
     user_file.close();
     strcpy(buffer, "Ok");
     send(client, buffer, sizeof(buffer), 0);
+    */
 }
+
+void write_user_to_json(Json::Value& root,std::string login, std::string password){
+    root[login] = password;
+    infile.open("user-pass.json");
+
+    Json::StyledStreamWriter writer;
+    writer.write(infile, root);
+    infile.close();
+}
+
 void addConnectedClients(int client)
 {
-
     for(int i = 0; i < clients_list.size() - 1; ++i) {
         char buffer[buf_s];
         memset(buffer, 0, buf_s);
@@ -251,7 +303,7 @@ void clientLogOut(std::string name)
     if (user == nullptr) {
         return;
     }
-    clients_list.remove(user);
+    //clients_list.remove(user);
     std::cout << "Remove: " << user->name << " by socket: " << user->socket << '\n';
     std::string message = "{#} " + user->name + " Disconnected\n";
     for (int i = 0; i < clients_list.size(); ++i) {
@@ -259,7 +311,6 @@ void clientLogOut(std::string name)
         send(send_to->socket, message.c_str(), message.size(), 0);
     }
 }
-
 
 void recvFile(int client, std::string to_whom, std::string file_name)
 {
@@ -284,8 +335,6 @@ void recvFile(int client, std::string to_whom, std::string file_name)
 	file.close();
 	std::cout << "End signal: " << '\n';
 }
-
-
 
 void clientDisconnected(int client)
 {

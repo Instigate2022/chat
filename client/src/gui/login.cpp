@@ -57,7 +57,12 @@ void Login::on_btn_login_clicked()
     ui->err_pass->clear();
     ui->err_log->clear();
     std::cout << "Start Login\n";
-    std::string reply = client->login(ui->input_login->text().toStdString(), ui->input_pass->text().toStdString());
+    std::string user_login = ui->input_login->text().toStdString();
+    for(int i = 0; i< user_login.size(); ++i){
+        user_login[i] = tolower(user_login[i]);
+    }
+    std::string reply = client->login(user_login, ui->input_pass->text().toStdString());
+
     std::cout << "Reply: " << reply << '\n';
     if (reply == "Ok") {
         ui->input_login->clear();

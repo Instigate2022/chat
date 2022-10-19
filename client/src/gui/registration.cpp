@@ -127,6 +127,11 @@ void Registration::on_btn_reg_clicked()
         return;
     }
     std::string user_login = ui->input_name->text().toStdString();
+
+    for(int i = 0; i< user_login.size(); ++i){
+        user_login[i] = tolower(user_login[i]);
+    }
+
     std::string pass = ui->input_pass->text().toStdString();
     std::string check = ui->input_conf->text().toStdString();
     if(!(login_check(user_login))) {
@@ -135,7 +140,7 @@ void Registration::on_btn_reg_clicked()
     if(!(pass_check(pass, check))) {
         return;
     }
-    if(client->registration(ui->input_name->text().toStdString(), ui->input_pass->text().toStdString())){
+    if(client->registration(user_login, ui->input_pass->text().toStdString())){
 
         ui->input_name->clear();
         ui->input_pass->clear();

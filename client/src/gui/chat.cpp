@@ -23,8 +23,9 @@ Chat::Chat(void *parent, Client *client) :
     int y = (screenGeometry.height() - this->height()) / 2;
     this->move(x, y);
     QLabel *myLabel = new QLabel(this);
-
-    myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg"));
+    int w = screenGeometry.width();
+    int h = screenGeometry.height()*2;
+    myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg").scaled(w,h, Qt::KeepAspectRatio));
     myLabel->show();
     login_wind = parent;
     ui->setupUi(this);

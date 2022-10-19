@@ -6,6 +6,7 @@
 #include <QString>
 #include <QCloseEvent>
 #include <QDesktopWidget>
+#include <cstring>
 #include "../engine/client.hpp"
 
 namespace Ui {

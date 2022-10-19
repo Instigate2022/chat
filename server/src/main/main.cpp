@@ -1,8 +1,12 @@
 #include "../connect/connect.hpp"
-
 int main()
 {
-    int server ,client;
+    std::ifstream file("user-pass.json", std::ifstream::binary);
+    if(file){
+        file >> user_json;
+
+    }
+    int server, client;
     socklen_t size;
     server = socket(AF_INET , SOCK_STREAM , 0);
 
