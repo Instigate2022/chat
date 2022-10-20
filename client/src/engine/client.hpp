@@ -21,11 +21,9 @@ private:
     bool isExit;
     std::thread thRecv;
 
-
 public:
     bool Connect(std::string ip, int port);
     void run();
-
     std::string file_link = "";
     std::string login(std::string login, std::string pass);
     void set_chat_window(void* wind_chat);

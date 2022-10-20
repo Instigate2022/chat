@@ -16,6 +16,10 @@ Login::Login(Client* client, bool isConnected)
     this->isConnected = isConnected;
     wind_reg = new Registration(this, client, isConnected);
     QRect screenGeometry = QApplication::desktop()->screenGeometry();
+
+
+
+
     int x = (screenGeometry.width() - this->width()) / 2;
     int y = (screenGeometry.height() - this->height()) / 2;
     this->move(x, y);
@@ -58,8 +62,9 @@ void Login::on_btn_login_clicked()
     ui->err_log->clear();
     std::cout << "Start Login\n";
     std::string user_login = ui->input_login->text().toStdString();
-    for(int i = 0; i< user_login.size(); ++i){
-        user_login[i] = tolower(user_login[i]);
+    for(auto&i : user_login)
+    {
+        i = tolower(i);
     }
     std::string reply = client->login(user_login, ui->input_pass->text().toStdString());
 

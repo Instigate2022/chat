@@ -127,11 +127,10 @@ void Registration::on_btn_reg_clicked()
         return;
     }
     std::string user_login = ui->input_name->text().toStdString();
-
-    for(int i = 0; i< user_login.size(); ++i){
-        user_login[i] = tolower(user_login[i]);
+    for(auto&i : user_login)
+    {
+        i = tolower(i);
     }
-
     std::string pass = ui->input_pass->text().toStdString();
     std::string check = ui->input_conf->text().toStdString();
     if(!(login_check(user_login))) {

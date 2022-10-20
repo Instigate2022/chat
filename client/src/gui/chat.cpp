@@ -108,7 +108,7 @@ void Chat::closeEvent(QCloseEvent *event)
         event->ignore();
     } else {
         users.clear();
-        //client->disconnect("{##}");
+
         event->accept();
     }
 }
