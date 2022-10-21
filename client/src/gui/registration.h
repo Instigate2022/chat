@@ -2,6 +2,7 @@
 #define REGISTRATION_H
 
 #include <QWidget>
+#include <QStyle>
 #include <QMessageBox>
 #include <QString>
 #include <QCloseEvent>

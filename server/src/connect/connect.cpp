@@ -144,24 +144,6 @@ bool ClientLogin(int client, std::string name, std::string pass)
     }
     send(client, message.c_str(), message.size(),0);
     return answer;
-    /*
-    std::ifstream file(name);
-    if(!file.is_open()) {
-        std::string message = "{?} Cancel";
-        send(client, message.c_str(), message.size(), 0);
-        return false;
-    }
-    std::string data_pass;
-    file >> data_pass;
-    if (pass != data_pass) {
-        std::string message = "{?} Wrong";
-        send(client, message.c_str(), message.size(), 0);
-        return false;
-    }
-    std::string message = "{?} Ok";
-    send(client, message.c_str(), message.size(), 0);
-    return true;
-    */
 }
 void Registration(int client, std::string login, std::string pass)
 {
@@ -176,7 +158,7 @@ void Registration(int client, std::string login, std::string pass)
     }
     else{
         std::cout << "else\n";
-        strcpy(buffer, "Is Exist");
+        strcpy(buffer, "Already exists");
         send(client, buffer, sizeof(buffer), 0);
     }
 

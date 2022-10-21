@@ -16,13 +16,11 @@ User* getUser(std::string name)
 Chat::Chat(void *parent, Client *client) :
     QWidget()
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    int x = (screenGeometry.width() - this->width()) / 2;
-    int y = (screenGeometry.height() - this->height()) / 2;
-    this->move(x, y);
+    this->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, this->size(), qApp->desktop()->geometry()));
     QLabel *myLabel = new QLabel(this);
-    int w = screenGeometry.width();
-    int h = screenGeometry.height()*2;
+    int w = qApp->desktop()->geometry().width();
+    int h = qApp->desktop()->geometry().height()*2;
+
     myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg").scaled(w,h, Qt::KeepAspectRatio));
     myLabel->show();
     login_wind = parent;
@@ -328,6 +326,7 @@ void Chat::on_show_users_clicked()
 
 void Chat::contextMenuEvent ( QContextMenuEvent * event )
 {
+    (void) event;
     QMenu* popMenu = new QMenu(this);
     QAction *deleteSeed = new QAction(tr("Delete"), this);
     QAction *clearSeeds = new QAction(tr("Clear"), this);

@@ -19,7 +19,7 @@ int main()
         std::cout << "Bind Error\n";
         return 1;
     }
-    std::cout << "stacvec bind anel " << std::endl;
+    std::cout << "Binding ..." << std::endl;
 
     size = sizeof(serv_addres);
 
