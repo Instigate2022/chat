@@ -18,10 +18,8 @@ Chat::Chat(void *parent, Client *client) :
     QWidget(),
     ui(new Ui::Chat)
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    int x = (screenGeometry.width() - this->width()) / 2;
-    int y = (screenGeometry.height() - this->height()) / 2;
-    this->move(x, y);
+    QRect screenGeometry;
+    this->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, this->size(), qApp->desktop()->geometry()));
     QLabel *myLabel = new QLabel(this);
     int w = screenGeometry.width();
     int h = screenGeometry.height()*2;
@@ -209,6 +207,7 @@ void Chat::on_show_users_clicked()
 
 void Chat::contextMenuEvent ( QContextMenuEvent * event )
 {
+    (void)event;
     QMenu* popMenu = new QMenu(this);
     QAction *deleteSeed = new QAction(tr("Delete"), this);
     QAction *clearSeeds = new QAction(tr("Clear"), this);
@@ -220,6 +219,7 @@ void Chat::contextMenuEvent ( QContextMenuEvent * event )
     connect(clearSeeds, SIGNAL(triggered()), this, SLOT(clearSeedsSlot()));
     connect(editSeeds, SIGNAL(triggered()), this, SLOT(editSeedsSlot()));
     popMenu->exec(QCursor::pos());
+
 }
  
 void Chat::deleteSeedSlot()

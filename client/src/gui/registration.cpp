@@ -6,10 +6,8 @@ Registration::Registration(QWidget *parent, Client *client, bool isConnected) :
     ui(new Ui::Registration)
 {
     this->isConnected = isConnected;
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    int x = (screenGeometry.width() - this->width()) / 2;
-    int y = (screenGeometry.height() - this->height()) / 2;
-    this->move(x, y);
+
+    this->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, this->size(), qApp->desktop()->geometry()));
     QLabel *myLabel = new QLabel(this);
     myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg"));
     myLabel->show();
@@ -88,31 +86,23 @@ Registration::~Registration()
 
 void Registration::analysis_pass(bool& uppercase,bool& lowercase,bool& number,bool& symbols, std::string pass)
 {
-    std::cout << "\n\n ANALYS START\n";
     std::string symbols_list = "!@#$%^&*_-+=|/;.,:";
     for(size_t i = 0; i < pass.size(); i++) {
         if(pass[i] >='A' && pass[i] <= 'Z') {
-            std::cout << "ANALISE 1\n";
                 uppercase = true;
         }
         else if (pass[i] >= 'a' && pass[i] <= 'z') {
-            std::cout << "ANALISE 2\n";
                 lowercase = true;
         }
         else if (pass[i] >= '0' && pass[i] <= '9') {
-            std::cout << "ANALISE 3\n";
                 number = true;
         }
-        else {
-            std::cout << "ANALISE 4\n";
+        else { 
             int index = symbols_list.find(pass[i]);
-            std::cout << "Index: " << index << '\n';
-            if (index >= 0) {
-                std::cout << "TRUE\n";
+            if (index >= 0) {     
                 symbols = true;
             }
             else {
-                std::cout << "False\n";
                 symbols = false;
                 return;
             }
@@ -191,7 +181,6 @@ void Registration::closeEvent(QCloseEvent *event)
     if(resBtn != QMessageBox::Yes) {
         event->ignore();
     } else {
-        //client->disconnect("{##}");
         event->accept();
     }
 }

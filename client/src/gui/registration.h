@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QString>
 #include <QCloseEvent>
+#include <QStyle>
 #include <QDesktopWidget>
 #include <cstring>
 #include "../engine/client.hpp"
