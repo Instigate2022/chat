@@ -17,7 +17,7 @@ CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I. -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
+INCPATH       = -I. -I. -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -37,10 +37,10 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = client1.0.0
-DISTDIR = /home/student/Desktop/chat/client/.tmp/client1.0.0
+DISTDIR = /home/student/Desktop/Armine/New\ Folder/chat_ui_done/client/.tmp/client1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
-LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so -lGL -lpthread -lstdc++fs   
+LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so -lGL -lpthread   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -160,7 +160,7 @@ TARGET        = client
 first: all
 ####### Build rules
 
-client: ui_chat.h ui_login.h ui_registration.h $(OBJECTS)  
+client:  $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: client.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -337,7 +337,6 @@ distdir: FORCE
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents src/engine/client.hpp src/gui/chat.h src/gui/login.h src/gui/registration.h $(DISTDIR)/
 	$(COPY_FILE) --parents src/engine/client.cpp src/gui/chat.cpp src/gui/login.cpp src/gui/registration.cpp src/main/main.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents src/gui/chat.ui src/gui/login.ui src/gui/registration.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -376,7 +375,7 @@ moc_chat.cpp: src/gui/chat.h \
 		src/engine/client.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/student/Desktop/chat/client/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/student/Desktop/chat/client -I/home/student/Desktop/chat/client -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include src/gui/chat.h -o moc_chat.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include '/home/student/Desktop/Armine/New Folder/chat_ui_done/client/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I'/home/student/Desktop/Armine/New Folder/chat_ui_done/client' -I'/home/student/Desktop/Armine/New Folder/chat_ui_done/client' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include src/gui/chat.h -o moc_chat.cpp
 
 moc_login.cpp: src/gui/login.h \
 		src/gui/chat.h \
@@ -384,40 +383,27 @@ moc_login.cpp: src/gui/login.h \
 		src/gui/registration.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/student/Desktop/chat/client/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/student/Desktop/chat/client -I/home/student/Desktop/chat/client -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include src/gui/login.h -o moc_login.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include '/home/student/Desktop/Armine/New Folder/chat_ui_done/client/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I'/home/student/Desktop/Armine/New Folder/chat_ui_done/client' -I'/home/student/Desktop/Armine/New Folder/chat_ui_done/client' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include src/gui/login.h -o moc_login.cpp
 
 moc_registration.cpp: src/gui/registration.h \
 		src/engine/client.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/student/Desktop/chat/client/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/student/Desktop/chat/client -I/home/student/Desktop/chat/client -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include src/gui/registration.h -o moc_registration.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include '/home/student/Desktop/Armine/New Folder/chat_ui_done/client/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I'/home/student/Desktop/Armine/New Folder/chat_ui_done/client' -I'/home/student/Desktop/Armine/New Folder/chat_ui_done/client' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include src/gui/registration.h -o moc_registration.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_chat.h ui_login.h ui_registration.h
+compiler_uic_make_all:
 compiler_uic_clean:
-	-$(DEL_FILE) ui_chat.h ui_login.h ui_registration.h
-ui_chat.h: src/gui/chat.ui \
-		/usr/lib/qt5/bin/uic
-	/usr/lib/qt5/bin/uic src/gui/chat.ui -o ui_chat.h
-
-ui_login.h: src/gui/login.ui \
-		/usr/lib/qt5/bin/uic
-	/usr/lib/qt5/bin/uic src/gui/login.ui -o ui_login.h
-
-ui_registration.h: src/gui/registration.ui \
-		/usr/lib/qt5/bin/uic
-	/usr/lib/qt5/bin/uic src/gui/registration.ui -o ui_registration.h
-
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
@@ -429,7 +415,6 @@ client.o: src/engine/client.cpp src/engine/client.hpp \
 
 chat.o: src/gui/chat.cpp src/gui/chat.h \
 		src/engine/client.hpp \
-		ui_chat.h \
 		src/gui/login.h \
 		src/gui/registration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o chat.o src/gui/chat.cpp
@@ -437,13 +422,11 @@ chat.o: src/gui/chat.cpp src/gui/chat.h \
 login.o: src/gui/login.cpp src/gui/login.h \
 		src/gui/chat.h \
 		src/engine/client.hpp \
-		src/gui/registration.h \
-		ui_login.h
+		src/gui/registration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o login.o src/gui/login.cpp
 
 registration.o: src/gui/registration.cpp src/gui/registration.h \
-		src/engine/client.hpp \
-		ui_registration.h
+		src/engine/client.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o registration.o src/gui/registration.cpp
 
 main.o: src/main/main.cpp src/gui/login.h \
