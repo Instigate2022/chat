@@ -244,28 +244,12 @@ bool server::recv_message(int user, bool *is_exit){
         std::cout << buffer << std::endl;
     }
 }
-
-void server::send_user_history(int user) const{
-    std::cout << "send_user_history\n";
-}
-
 void server::client_connect(int user){
     bool is_exit = false;
-    //is_exit = recv_message(user, &is_exit);
     std::thread recieve_thread([&](){
             is_exit = recv_message(user, &is_exit);
             });
     recieve_thread.join();
-    /*
-    std::thread send_thread([&](){
-            is_exit = send_message(user, &is_exit);
-            });
-    std::thread recieve_thread([&](){
-            is_exit = recv_message(user, &is_exit);
-            });
-    send_thread.join();
-    recieve_thread.join();
-    */
 }
 
 int server::check_command(std::string command) const{
@@ -277,13 +261,6 @@ int server::check_command(std::string command) const{
     return -1;
 }
 
-void server::send_online_user_info() const{
-   /*
-    for( auto& user: online_users){
-
-    }
-    */
-}
 void server::recv_file(int user, std::string to_whom, std::string file_name){
     std::cout << "To: " << to_whom << '\n';
     std::cout << "File name: " << file_name << '\n';

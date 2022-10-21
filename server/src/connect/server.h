@@ -135,8 +135,6 @@ public:
     void set_clients_list(int socket, std::string login,std::string password, std::string state);
     int check_command(std::string command) const;
     //send user all his(her) conversation history
-    void send_user_history(int user) const;
-    void send_online_user_info()const;
     void do_commands(int user, std::vector<std::string>& list,int commands, std::string buffer);
 
     void recv_file(int user, std::string to_whom, std::string file_name);
