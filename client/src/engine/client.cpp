@@ -121,6 +121,10 @@ bool Client::Recv()
         char buffer[buf_s];
         memset(buffer, 0, buf_s);
         recv(serverSocket, buffer, buf_s, 0);
+	if(std::string(buffer) == ""){
+		std::cout << "Server crashed";
+		exit(1);
+	}
         std::cout << "New Message: " << buffer << '\n';
         std::vector<std::string> list = split(std::string(buffer), ' ');
         if (list[0] == "{?}") {
