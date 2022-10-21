@@ -1,5 +1,4 @@
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -199,20 +198,3 @@ void Client::sendFile(std::string to_whom)
         send(serverSocket, end_signal.c_str(), end_signal.size(), 0);
 	file.close();
 }
-/*
-bool Client::RecvFile()
-{
-    FILE* fp;
-    char buffer[buf_s];
-    int ch = 0;
-    fp = fopen("recievd.txt" ,"a");
-    int words;
-    recv(serverSocket, &words, sizeof(int), 0);
-    while(ch != words)
-    {
-        recv(serverSocket, buffer, buf_s,0);
-        fprintf(fp,"%s", buffer);
-    }
-    file_link = "";
-}
-*/

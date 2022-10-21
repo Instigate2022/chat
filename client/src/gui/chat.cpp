@@ -1,5 +1,4 @@
 #include "chat.h"
-#include "ui_chat.h"
 #include "login.h"
 
 QList<User*> users;
@@ -15,29 +14,151 @@ User* getUser(std::string name)
 }
 
 Chat::Chat(void *parent, Client *client) :
-    QWidget(),
-    ui(new Ui::Chat)
+    QWidget()
 {
-    QRect screenGeometry;
-    this->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, this->size(), qApp->desktop()->geometry()));
+    QRect screenGeometry = QApplication::desktop()->screenGeometry();
+    int x = (screenGeometry.width() - this->width()) / 2;
+    int y = (screenGeometry.height() - this->height()) / 2;
+    this->move(x, y);
     QLabel *myLabel = new QLabel(this);
     int w = screenGeometry.width();
     int h = screenGeometry.height()*2;
     myLabel->setPixmap(QPixmap("src/gui/bg-01.jpg").scaled(w,h, Qt::KeepAspectRatio));
     myLabel->show();
     login_wind = parent;
-    ui->setupUi(this);
+    setup(this);
     this->client = client;
-    connect(ui->input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
+    connect(input_msg, &QLineEdit::returnPressed, this, &Chat::on_btn_send_clicked);
     QListWidgetItem *server_item = new QListWidgetItem("Server");
-    ui->list_users->addItem(server_item);
+    list_users->addItem(server_item);
     users.push_back(new User("Server", new QListWidget(), server_item, true));
 }
 
 Chat::~Chat()
 {
-    delete ui;
 }
+
+void Chat::setup(QWidget *Chat)
+{
+    if (Chat->objectName().isEmpty())
+        Chat->setObjectName(QString::fromUtf8("Chat"));
+    Chat->resize(809, 518);
+    horizontalLayout_3 = new QHBoxLayout(Chat);
+    horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+    list_users = new QListWidget(Chat);
+    list_users->setObjectName(QString::fromUtf8("list_users"));
+    list_users->setMaximumSize(QSize(200, 16777215));
+
+    horizontalLayout_3->addWidget(list_users);
+
+    show_users = new QPushButton(Chat);
+    show_users->setObjectName(QString::fromUtf8("show_users"));
+    show_users->setEnabled(true);
+    show_users->setMinimumSize(QSize(30, 30));
+    show_users->setMaximumSize(QSize(30, 30));
+    QFont font;
+    font.setPointSize(15);
+    font.setBold(true);
+    font.setWeight(75);
+    show_users->setFont(font);
+    show_users->setStyleSheet(QString::fromUtf8(""));
+
+    horizontalLayout_3->addWidget(show_users);
+
+    verticalLayout = new QVBoxLayout();
+    verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+    horizontalLayout_2 = new QHBoxLayout();
+    horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+    horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    horizontalLayout_2->addItem(horizontalSpacer_2);
+
+    label_name = new QLabel(Chat);
+    label_name->setObjectName(QString::fromUtf8("label_name"));
+    QFont font1;
+    font1.setPointSize(20);
+    font1.setBold(true);
+    font1.setWeight(75);
+    label_name->setFont(font1);
+
+    horizontalLayout_2->addWidget(label_name);
+
+    horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    horizontalLayout_2->addItem(horizontalSpacer);
+
+    btn_logOut = new QPushButton(Chat);
+    btn_logOut->setObjectName(QString::fromUtf8("btn_logOut"));
+    QFont font2;
+    font2.setPointSize(12);
+    font2.setBold(true);
+    font2.setWeight(75);
+    btn_logOut->setFont(font2);
+
+    horizontalLayout_2->addWidget(btn_logOut);
+
+
+    verticalLayout->addLayout(horizontalLayout_2);
+
+    list_chat = new QListWidget(Chat);
+    list_chat->setObjectName(QString::fromUtf8("list_chat"));
+
+    verticalLayout->addWidget(list_chat);
+
+    horizontalLayout = new QHBoxLayout();
+    horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+    input_msg = new QLineEdit(Chat);
+    input_msg->setObjectName(QString::fromUtf8("input_msg"));
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(input_msg->sizePolicy().hasHeightForWidth());
+    input_msg->setSizePolicy(sizePolicy);
+
+    horizontalLayout->addWidget(input_msg);
+
+    btn_file = new QPushButton(Chat);
+    btn_file->setObjectName(QString::fromUtf8("btn_file"));
+    QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    sizePolicy1.setHorizontalStretch(0);
+    sizePolicy1.setVerticalStretch(0);
+    sizePolicy1.setHeightForWidth(btn_file->sizePolicy().hasHeightForWidth());
+    btn_file->setSizePolicy(sizePolicy1);
+    btn_file->setFont(font2);
+
+    horizontalLayout->addWidget(btn_file);
+
+    btn_send = new QPushButton(Chat);
+    btn_send->setObjectName(QString::fromUtf8("btn_send"));
+    sizePolicy1.setHeightForWidth(btn_send->sizePolicy().hasHeightForWidth());
+    btn_send->setSizePolicy(sizePolicy1);
+    btn_send->setFont(font2);
+
+    horizontalLayout->addWidget(btn_send);
+
+
+    verticalLayout->addLayout(horizontalLayout);
+
+
+    horizontalLayout_3->addLayout(verticalLayout);
+
+    show_users->raise();
+    list_users->raise();
+
+    retranslate(Chat);
+
+    QMetaObject::connectSlotsByName(Chat);
+} // setup
+
+void Chat::retranslate(QWidget *Chat)
+{
+    Chat->setWindowTitle(QApplication::translate("Chat", "Chat", nullptr));
+    show_users->setText(QApplication::translate("Chat", "<", nullptr));
+    label_name->setText(QApplication::translate("Chat", "Name", nullptr));
+    btn_logOut->setText(QApplication::translate("Chat", "Log Out", nullptr));
+    btn_file->setText(QApplication::translate("Chat", "File", nullptr));
+    btn_send->setText(QApplication::translate("Chat", "Send", nullptr));
+} // retranslate
 
 void Chat::on_btn_logOut_clicked()
 {
@@ -67,7 +188,7 @@ void Chat::on_btn_file_clicked()
                                     QMessageBox::No | QMessageBox::Yes,
                                     QMessageBox::Yes);
     if(mesBtn == QMessageBox::Yes) {
-         std::string to_whom = ui->list_users->currentItem()->text().toStdString();
+         std::string to_whom = list_users->currentItem()->text().toStdString();
          client->sendFile(to_whom);
     }
     client->file_link = "";
@@ -76,24 +197,24 @@ void Chat::on_btn_file_clicked()
 void Chat::on_btn_send_clicked()
 {
  if (isEdit == true) {
-        ui->list_chat->currentItem()->setText(ui->input_msg->text() + " (edited)");
+        list_chat->currentItem()->setText(input_msg->text() + " (edited)");
         isEdit = false;
         return;
     }
 
-    std::string message = ui->input_msg->text().toStdString();
-    int size = ui->list_users->count();
+    std::string message = input_msg->text().toStdString();
+    int size = list_users->count();
     if (size <= 0) {
         return;
     }
-    std::string to_whom = ui->list_users->currentItem()->text().toStdString();
+    std::string to_whom = list_users->currentItem()->text().toStdString();
     client->Send(message, to_whom);
     QListWidgetItem *item = new QListWidgetItem();
     item->setTextAlignment(Qt::AlignRight);
     item->setText(message.c_str());
-    ui->list_chat->addItem(item);
-    ui->input_msg->clear();
-    ui->list_chat->scrollToBottom();
+    list_chat->addItem(item);
+    input_msg->clear();
+    list_chat->scrollToBottom();
 }
 
 void Chat::closeEvent(QCloseEvent *event)
@@ -120,7 +241,7 @@ template<typename T> void print_vector(std::vector<T> list)
 
 void Chat::set_list_message(std::string by_user, std::string message)
 {
-    ui->list_chat->scrollToBottom();
+    list_chat->scrollToBottom();
     std::cout << "New Message By user: " << by_user << '\n';
     std::cout << "Message = " << message << '\n';
     User *user = getUser(by_user);
@@ -135,12 +256,12 @@ void Chat::set_list_message(std::string by_user, std::string message)
     if (user->item == nullptr) {
         user->item = new QListWidgetItem(user->name.c_str());
     }
-    if (ui->list_users->currentItem() != user->item) {
+    if (list_users->currentItem() != user->item) {
         user->item->setForeground(Qt::green);
         user->item->setIcon(QIcon(QPixmap("src/gui/icon.jpg")));
     }
     else {
-		user->item->setIcon(QIcon(QPixmap("")));
+        user->item->setIcon(QIcon(QPixmap("")));
     }
 }
 
@@ -156,9 +277,9 @@ void Chat::set_users_list(std::string name)
     QListWidgetItem *user_item = new QListWidgetItem(name.c_str());
     User *new_user = new User(name, nullptr, user_item, true);
     users.push_back(new_user);
-    ui->list_users->addItem(user_item);
-    QListWidgetItem *prev = ui->list_users->currentItem();
-    ui->list_users->setCurrentItem(user_item);
+    list_users->addItem(user_item);
+    QListWidgetItem *prev = list_users->currentItem();
+    list_users->setCurrentItem(user_item);
     if (prev == nullptr) {
         return;
     }
@@ -169,22 +290,22 @@ void Chat::on_list_users_currentItemChanged(QListWidgetItem *current, QListWidge
 {
     Q_UNUSED(previous)
     std::string name = current->text().toStdString();
-    ui->label_name->setText(current->text());
+    label_name->setText(current->text());
     User *user = getUser(name);
     if (user == nullptr) return;
     if (user->chat == nullptr) {
         user->chat = new QListWidget();
     }
-    ui->list_chat->hide();
+    list_chat->hide();
     user->item->setIcon(QIcon(QPixmap("")));
-    ui->list_chat = user->chat;
-    ui->verticalLayout->insertWidget(1, ui->list_chat);
+    list_chat = user->chat;
+    verticalLayout->insertWidget(1, list_chat);
     if (user->isOnline) {
         user->item->setForeground(Qt::green);
     } else {
         user->item->setForeground(Qt::red);
     }
-    ui->list_chat->show();
+    list_chat->show();
 }
 
 void Chat::client_disconnected(std::string name)
@@ -196,18 +317,17 @@ void Chat::client_disconnected(std::string name)
 
 void Chat::on_show_users_clicked()
 {
-    if (ui->list_users->isHidden()) {
-        ui->list_users->show();
-        ui->show_users->setText("<");
+    if (list_users->isHidden()) {
+        list_users->show();
+        show_users->setText("<");
     } else {
-        ui->show_users->setText(">");
-        ui->list_users->hide();
+        show_users->setText(">");
+        list_users->hide();
     }
 }
 
 void Chat::contextMenuEvent ( QContextMenuEvent * event )
 {
-    (void)event;
     QMenu* popMenu = new QMenu(this);
     QAction *deleteSeed = new QAction(tr("Delete"), this);
     QAction *clearSeeds = new QAction(tr("Clear"), this);
@@ -219,28 +339,27 @@ void Chat::contextMenuEvent ( QContextMenuEvent * event )
     connect(clearSeeds, SIGNAL(triggered()), this, SLOT(clearSeedsSlot()));
     connect(editSeeds, SIGNAL(triggered()), this, SLOT(editSeedsSlot()));
     popMenu->exec(QCursor::pos());
-
 }
- 
+
 void Chat::deleteSeedSlot()
 {
     int ch = QMessageBox::warning(NULL, "Warning",
                                   "Are you sure to delete seed ?",
                                   QMessageBox::Yes | QMessageBox::No,
                                   QMessageBox::No);
- 
+
     if ( ch != QMessageBox::Yes )
         return;
- 
-    QListWidgetItem * item = ui->list_chat->currentItem();
+
+    QListWidgetItem * item = list_chat->currentItem();
     if( item == NULL )
         return;
     item->setText(" deleted message")  ;
 }
 
-void Chat::clearSeedsSlot()    
-{                                                                                                                                                                                             
-    int ch = QMessageBox::warning(NULL, "Warning",                                                                                                                                            
+void Chat::clearSeedsSlot()
+{
+    int ch = QMessageBox::warning(NULL, "Warning",
                                   "Are you sure to clear seeds ?",
                                   QMessageBox::Yes | QMessageBox::No,
                                   QMessageBox::No);
@@ -248,18 +367,18 @@ void Chat::clearSeedsSlot()
     if ( ch != QMessageBox::Yes )
         return;
 
-    QListWidgetItem * item = ui->list_chat->currentItem();
+    QListWidgetItem * item = list_chat->currentItem();
     if( item == NULL )
         return;
 
-    ui->list_chat->clear();
+    list_chat->clear();
 }
 
 void Chat::editSeedsSlot()
 {
     isEdit = true;
-    QListWidgetItem *item = ui->list_chat->currentItem();
+    QListWidgetItem *item = list_chat->currentItem();
     if (item == NULL)
         return;
-    ui->input_msg->setText(item->text());
+    input_msg->setText(item->text());
 }

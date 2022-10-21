@@ -5,14 +5,18 @@
 #include <QMessageBox>
 #include <QString>
 #include <QCloseEvent>
-#include <QStyle>
 #include <QDesktopWidget>
+#include <QVBoxLayout>
+#include <QLineEdit>
 #include <cstring>
 #include "../engine/client.hpp"
+#include <QLabel>
+#include <QRect>
+#include <QtCore/QVariant>
+#include <QApplication>
+#include <QHBoxLayout>
+#include <QPushButton>
 
-namespace Ui {
-class Registration;
-}
 
 class Registration : public QWidget
 {
@@ -22,7 +26,26 @@ public:
     explicit Registration(QWidget *parent, Client *client, bool isConnected);
     bool pass_check(std::string pass, std::string check);
     bool login_check(std::string user_login);
+    void setup(QWidget *Registration);
+    void retranslate(QWidget *Registration);
     ~Registration();
+
+    QVBoxLayout *verticalLayout_2;
+    QLabel *label_welcom;
+    QVBoxLayout *verticalLayout;
+    QLineEdit *input_name;
+    QLabel *label_3;
+    QVBoxLayout *verticalLayout_5;
+    QLineEdit *input_pass;
+    QLabel *label_4;
+    QVBoxLayout *verticalLayout_3;
+    QLineEdit *input_conf;
+    QLabel *label_5;
+    QLabel *label_2;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *btn_reg;
+    QPushButton *btn_cancel;
+    QLabel *label;
 
 private slots:
     void on_btn_reg_clicked();
@@ -41,7 +64,6 @@ private slots:
 
 private:
     QWidget *parent;
-    Ui::Registration *ui;
     int serverSocket;
     Client *client;
     bool isConnected;

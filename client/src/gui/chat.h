@@ -16,10 +16,13 @@
 #include <QFileDialog>
 #include <QCloseEvent>
 #include <QItemSelection>
-
-namespace Ui {
-class Chat;
-}
+#include <QHBoxLayout>
+#include <QtCore/QVariant>
+#include <QApplication>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QVBoxLayout>
 
 class Chat : public QWidget
 {
@@ -31,6 +34,23 @@ public:
     void set_list_message(std::string by_user, std::string msg);
     void set_users_list(std::string name);
     void client_disconnected(std::string name);
+    void setup(QWidget *Chat);
+    void retranslate(QWidget *Chat);
+
+    QHBoxLayout *horizontalLayout_3;
+    QListWidget *list_users;
+    QPushButton *show_users;
+    QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout_2;
+    QSpacerItem *horizontalSpacer_2;
+    QLabel *label_name;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *btn_logOut;
+    QListWidget *list_chat;
+    QHBoxLayout *horizontalLayout;
+    QLineEdit *input_msg;
+    QPushButton *btn_file;
+    QPushButton *btn_send;
 
 private slots:
     void contextMenuEvent ( QContextMenuEvent * event ) ;
@@ -38,14 +58,13 @@ private slots:
     void on_btn_file_clicked();
     void on_btn_send_clicked();
     void on_btn_logOut_clicked();
-    void on_show_users_clicked();                                                                                                                                                                                                                                                                                                                                                           
-    void deleteSeedSlot();                                                                                                                                                                    
-    void clearSeedsSlot();                                                                                                                                                                    
-    void editSeedsSlot();                                                                                                                                                                     
+    void on_show_users_clicked();
+    void deleteSeedSlot();
+    void clearSeedsSlot();
+    void editSeedsSlot();
     void on_list_users_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
-    Ui::Chat *ui;
     void *login_wind;
     Client *client;
     bool isEdit = false;

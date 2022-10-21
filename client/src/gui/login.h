@@ -10,10 +10,12 @@
 #include <QTextStream>
 #include <QListWidget>
 #include <QDesktopWidget>
-
-QT_BEGIN_NAMESPACE
-namespace Ui { class Login; }
-QT_END_NAMESPACE
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QApplication>
+#include <QtCore/QVariant>
+#include <QLabel>
+#include <QLineEdit>
 
 struct User
 {
@@ -31,7 +33,20 @@ class Login : public QWidget
 public:
     Login(Client *client, bool isConnected);
     ~Login();
+    void setup(QWidget *Login);
+    void retranslate(QWidget *Login);
     void run_chat();
+
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout_2;
+    QLabel *label;
+    QLabel *label_welcom;
+    QLineEdit *input_pass;
+    QPushButton *btn_reg;
+    QPushButton *btn_login;
+    QLineEdit *input_login;
+    QLabel *err_log;
+    QLabel *err_pass;
 
 private slots:
     void on_btn_reg_clicked();
@@ -39,7 +54,6 @@ private slots:
     void closeEvent(QCloseEvent *event);
 
 private:
-    Ui::Login *ui;
     Client *client;
     Chat *wind_chat;
     Registration *wind_reg;
